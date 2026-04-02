@@ -1,0 +1,305 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TOC Simulator — IIIT Sri City</title>
+    <meta name="description" content="An interactive Theory of Computation simulator built for IIIT Sri City students. Explore DFA, Regex, CFG, PDA, Turing Machines and Decidability.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="styles.css">
+</head>
+<body>
+
+    <!-- Subtle dot grid background -->
+    <div class="bg-grid"></div>
+    <div class="bg-glow"></div>
+
+    <!-- Floating Pill Navbar -->
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <img src="https://upload.wikimedia.org/wikipedia/en/e/e0/Indian_Institute_of_Information_Technology%2C_Sri_City_logo.png" alt="IIITS" class="nav-logo">
+            <span>TOC Lab</span>
+        </div>
+        <div class="nav-links">
+            <a href="#" onclick="showPage('landing'); return false;" class="nav-link active" data-page="landing">Product</a>
+            <a href="#" onclick="showPage('app'); show('unit1'); return false;" class="nav-link" data-page="app">Simulators</a>
+            <a href="#features" class="nav-link">Features</a>
+            <a href="#" onclick="showPage('app'); show('unit1'); return false;" class="nav-link nav-cta">Start Free →</a>
+        </div>
+    </nav>
+
+    <!-- ============ LANDING PAGE ============ -->
+    <div id="landing-page" class="page active">
+
+        <!-- Hero Section -->
+        <section class="hero">
+            <div class="hero-badge">
+                <span class="badge-new">New</span>
+                Interactive TOC Simulator for IIITS students
+            </div>
+            <h1 class="hero-title">Simulate automata,<br>grammars in <span class="highlight">time.</span></h1>
+            <p class="hero-subtitle">Every DFA, regex, grammar, and Turing machine. Tested interactively — built for students of IIIT Sri City.</p>
+            <div class="hero-actions">
+                <button class="btn-primary" onclick="showPage('app'); show('unit1');">
+                    <span class="dot"></span>
+                    Start Exploring
+                </button>
+                <a href="#features" class="btn-outline">View Features ↓</a>
+            </div>
+        </section>
+
+        <!-- College Logo Strip -->
+        <section class="college-strip">
+            <p class="strip-label">Built for students at</p>
+            <div class="strip-logo">
+                <img src="https://upload.wikimedia.org/wikipedia/en/e/e0/Indian_Institute_of_Information_Technology%2C_Sri_City_logo.png" alt="IIITS Logo">
+                <span>Indian Institute of Information Technology, Sri City</span>
+            </div>
+        </section>
+
+        <!-- Manifesto / Dark Section -->
+        <section class="manifesto">
+            <p class="manifesto-text">
+                Theory of Computation can feel <span class="dim">overwhelming 🌀</span> — abstract definitions, 
+                <span class="dim">complex state machines ⚙️</span> and <span class="dim">formal proofs 📝</span> that seem distant from practice.
+                <br><br>
+                So we built a hands-on lab <span class="accent-text">⚡</span> where you can actually 
+                <span class="accent-text">run</span> your automata, <span class="accent-text">test</span> your grammars, 
+                and <span class="accent-text">see</span> computation happen in real time <span class="accent-text">🕐</span>
+            </p>
+        </section>
+
+        <!-- Feature Cards -->
+        <section class="features" id="features">
+            <div class="features-heading">
+                <div class="section-label"><span class="dot"></span> Modules</div>
+                <h2>Six units. One simulator.</h2>
+                <p>Everything you need for your TOC course, from finite automata to the limits of computation.</p>
+            </div>
+            <div class="features-grid">
+                <div class="feature-card" onclick="showPage('app'); show('unit1');">
+                    <div class="feature-icon icon-purple"></div>
+                    <h3>DFA Simulator</h3>
+                    <p>Build deterministic finite automata with custom states and transitions. Enter inputs and trace acceptance step by step.</p>
+                </div>
+                <div class="feature-card" onclick="showPage('app'); show('unit2');">
+                    <div class="feature-icon icon-green"></div>
+                    <h3>Regular Expressions</h3>
+                    <p>Validate strings against regex patterns instantly. Understand which strings belong to a regular language.</p>
+                </div>
+                <div class="feature-card" onclick="showPage('app'); show('unit3');">
+                    <div class="feature-icon icon-amber"></div>
+                    <h3>Context-Free Grammars</h3>
+                    <p>Define production rules and check if strings can be derived. A quick way to verify your CFG constructions.</p>
+                </div>
+                <div class="feature-card" onclick="showPage('app'); show('unit4');">
+                    <div class="feature-icon icon-cyan"></div>
+                    <h3>Pushdown Automata</h3>
+                    <p>Simulate stack-based computation. Test balanced parentheses and explore the power of context-free languages.</p>
+                </div>
+                <div class="feature-card" onclick="showPage('app'); show('unit5');">
+                    <div class="feature-icon icon-rose"></div>
+                    <h3>Turing Machines</h3>
+                    <p>The most powerful computation model. Run binary flip operations on an infinite tape and observe the output.</p>
+                </div>
+                <div class="feature-card" onclick="showPage('app'); show('unit6');">
+                    <div class="feature-icon icon-orange"></div>
+                    <h3>Decidability</h3>
+                    <p>Explore the Halting Problem — the foundational proof that some problems can never be solved by any algorithm.</p>
+                </div>
+            </div>
+        </section>
+
+        <!-- About Section -->
+        <section class="about-section" id="about">
+            <div class="about-card">
+                <img src="https://upload.wikimedia.org/wikipedia/en/e/e0/Indian_Institute_of_Information_Technology%2C_Sri_City_logo.png" alt="IIITS Logo" class="about-logo">
+                <h2>About This Project</h2>
+                <p>This interactive TOC simulator was created as a hands-on learning tool for students at the <strong>Indian Institute of Information Technology, Sri City (IIITS)</strong>.</p>
+                <p>It covers all six major units of the Theory of Computation course — from finite automata to decidability — letting you move beyond textbook definitions and actually <em>run</em> the computational models you study in class.</p>
+                <p>Designed and developed by <strong>Sanidhya Joshi</strong>.</p>
+            </div>
+        </section>
+
+        <!-- Footer -->
+        <footer class="footer">
+            <div class="footer-left">
+                <span>TOC Simulator © 2026 · IIIT Sri City</span>
+            </div>
+            <div class="footer-center">
+                <a href="https://linkedin.com/in/sanidhya-joshi" target="_blank" title="LinkedIn">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M20.447 20.452h-3.554v-5.569c0-1.328-.027-3.037-1.852-3.037-1.853 0-2.136 1.445-2.136 2.939v5.667H9.351V9h3.414v1.561h.046c.477-.9 1.637-1.85 3.37-1.85 3.601 0 4.267 2.37 4.267 5.455v6.286zM5.337 7.433a2.062 2.062 0 01-2.063-2.065 2.064 2.064 0 112.063 2.065zm1.782 13.019H3.555V9h3.564v11.452zM22.225 0H1.771C.792 0 0 .774 0 1.729v20.542C0 23.227.792 24 1.771 24h20.451C23.2 24 24 23.227 24 22.271V1.729C24 .774 23.2 0 22.222 0h.003z"/></svg>
+                </a>
+                <a href="https://github.com/sanidhya-joshi" target="_blank" title="GitHub">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 .297c-6.63 0-12 5.373-12 12 0 5.303 3.438 9.8 8.205 11.385.6.113.82-.258.82-.577 0-.285-.01-1.04-.015-2.04-3.338.724-4.042-1.61-4.042-1.61C4.422 18.07 3.633 17.7 3.633 17.7c-1.087-.744.084-.729.084-.729 1.205.084 1.838 1.236 1.838 1.236 1.07 1.835 2.809 1.305 3.495.998.108-.776.417-1.305.76-1.605-2.665-.3-5.466-1.332-5.466-5.93 0-1.31.465-2.38 1.235-3.22-.135-.303-.54-1.523.105-3.176 0 0 1.005-.322 3.3 1.23.96-.267 1.98-.399 3-.405 1.02.006 2.04.138 3 .405 2.28-1.552 3.285-1.23 3.285-1.23.645 1.653.24 2.873.12 3.176.765.84 1.23 1.91 1.23 3.22 0 4.61-2.805 5.625-5.475 5.92.42.36.81 1.096.81 2.22 0 1.606-.015 2.896-.015 3.286 0 .315.21.69.825.57C20.565 22.092 24 17.592 24 12.297c0-6.627-5.373-12-12-12"/></svg>
+                </a>
+                <a href="https://instagram.com/sanidhya.joshi" target="_blank" title="Instagram">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="currentColor"><path d="M12 2.163c3.204 0 3.584.012 4.85.07 3.252.148 4.771 1.691 4.919 4.919.058 1.265.069 1.645.069 4.849 0 3.205-.012 3.584-.069 4.849-.149 3.225-1.664 4.771-4.919 4.919-1.266.058-1.644.07-4.85.07-3.204 0-3.584-.012-4.849-.07-3.26-.149-4.771-1.699-4.919-4.92-.058-1.265-.07-1.644-.07-4.849 0-3.204.013-3.583.07-4.849.149-3.227 1.664-4.771 4.919-4.919 1.266-.057 1.645-.069 4.849-.069zM12 0C8.741 0 8.333.014 7.053.072 2.695.272.273 2.69.073 7.052.014 8.333 0 8.741 0 12c0 3.259.014 3.668.072 4.948.2 4.358 2.618 6.78 6.98 6.98C8.333 23.986 8.741 24 12 24c3.259 0 3.668-.014 4.948-.072 4.354-.2 6.782-2.618 6.979-6.98.059-1.28.073-1.689.073-4.948 0-3.259-.014-3.667-.072-4.947-.196-4.354-2.617-6.78-6.979-6.98C15.668.014 15.259 0 12 0zm0 5.838a6.162 6.162 0 100 12.324 6.162 6.162 0 000-12.324zM12 16a4 4 0 110-8 4 4 0 010 8zm6.406-11.845a1.44 1.44 0 100 2.881 1.44 1.44 0 000-2.881z"/></svg>
+                </a>
+                <a href="mailto:sanidhya.j@iiits.in" title="Email">
+                    <svg width="18" height="18" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2"><rect x="2" y="4" width="20" height="16" rx="2"/><path d="m22 7-8.97 5.7a1.94 1.94 0 0 1-2.06 0L2 7"/></svg>
+                </a>
+            </div>
+            <div class="footer-right">
+                <span class="status-dot"></span> System Online
+            </div>
+        </footer>
+    </div>
+
+    <!-- ============ APP PAGE (Simulator) ============ -->
+    <div id="app-page" class="page">
+        <div class="app-layout">
+            <!-- Sidebar -->
+            <aside class="sidebar">
+                <h2 class="sidebar-title">Modules</h2>
+                <button class="sidebar-btn active" data-unit="unit1" onclick="show('unit1')">
+                    <span class="sidebar-dot dot-purple"></span> DFA Simulator
+                </button>
+                <button class="sidebar-btn" data-unit="unit2" onclick="show('unit2')">
+                    <span class="sidebar-dot dot-green"></span> Regex Checker
+                </button>
+                <button class="sidebar-btn" data-unit="unit3" onclick="show('unit3')">
+                    <span class="sidebar-dot dot-amber"></span> CFG Derivation
+                </button>
+                <button class="sidebar-btn" data-unit="unit4" onclick="show('unit4')">
+                    <span class="sidebar-dot dot-cyan"></span> PDA Simulator
+                </button>
+                <button class="sidebar-btn" data-unit="unit5" onclick="show('unit5')">
+                    <span class="sidebar-dot dot-rose"></span> Turing Machine
+                </button>
+                <button class="sidebar-btn" data-unit="unit6" onclick="show('unit6')">
+                    <span class="sidebar-dot dot-orange"></span> Decidability
+                </button>
+                <div class="sidebar-divider"></div>
+                <button class="sidebar-btn back-btn" onclick="showPage('landing')">
+                    ← Back to Home
+                </button>
+            </aside>
+
+            <!-- Simulator Content -->
+            <main class="sim-content">
+                <!-- UNIT 1 DFA -->
+                <div id="unit1" class="section active">
+                    <div class="section-header">
+                        <span class="section-badge badge-purple">Unit 1</span>
+                        <h2>DFA Simulator</h2>
+                    </div>
+                    <div class="sim-card">
+                        <label>Transitions <span class="hint">(Format: q0,a=q1)</span></label>
+                        <textarea id="dfaTransitions" placeholder="q0,a=q1&#10;q1,b=q2" rows="4"></textarea>
+                        <div class="input-row">
+                            <div class="input-group">
+                                <label>Start State</label>
+                                <input id="dfaStart" placeholder="e.g. q0">
+                            </div>
+                            <div class="input-group">
+                                <label>Accept States</label>
+                                <input id="dfaAccept" placeholder="Comma separated">
+                            </div>
+                        </div>
+                        <label>Input String</label>
+                        <input id="dfaInput" placeholder="Enter input string">
+                        <button class="btn-run" onclick="runDFA()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Run DFA
+                        </button>
+                        <div id="dfaResult" class="result-box"></div>
+                    </div>
+                </div>
+
+                <!-- UNIT 2 REGEX -->
+                <div id="unit2" class="section">
+                    <div class="section-header">
+                        <span class="section-badge badge-green">Unit 2</span>
+                        <h2>Regex Checker</h2>
+                    </div>
+                    <div class="sim-card">
+                        <label>Regular Expression</label>
+                        <input id="regex" placeholder="Enter regex (e.g. a*b)">
+                        <label>Test String</label>
+                        <input id="regexStr" placeholder="Enter string to test">
+                        <button class="btn-run" onclick="checkRegex()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Check Match
+                        </button>
+                        <div id="regexResult" class="result-box"></div>
+                    </div>
+                </div>
+
+                <!-- UNIT 3 CFG -->
+                <div id="unit3" class="section">
+                    <div class="section-header">
+                        <span class="section-badge badge-amber">Unit 3</span>
+                        <h2>CFG Derivation</h2>
+                    </div>
+                    <div class="sim-card">
+                        <label>Production Rules <span class="hint">(e.g. S→aS|b)</span></label>
+                        <textarea id="cfgRules" placeholder="S->aS|b" rows="3"></textarea>
+                        <label>Input String</label>
+                        <input id="cfgInput" placeholder="String to derive">
+                        <button class="btn-run" onclick="checkCFG()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Check Derivation
+                        </button>
+                        <div id="cfgResult" class="result-box"></div>
+                    </div>
+                </div>
+
+                <!-- UNIT 4 PDA -->
+                <div id="unit4" class="section">
+                    <div class="section-header">
+                        <span class="section-badge badge-cyan">Unit 4</span>
+                        <h2>PDA — Balanced Parentheses</h2>
+                    </div>
+                    <div class="sim-card">
+                        <label>Input String</label>
+                        <input id="pdaInput" placeholder="Enter parentheses string e.g. (())">
+                        <button class="btn-run" onclick="runPDA()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Check Balance
+                        </button>
+                        <div id="pdaResult" class="result-box"></div>
+                    </div>
+                </div>
+
+                <!-- UNIT 5 TM -->
+                <div id="unit5" class="section">
+                    <div class="section-header">
+                        <span class="section-badge badge-rose">Unit 5</span>
+                        <h2>Turing Machine — Binary Flip</h2>
+                    </div>
+                    <div class="sim-card">
+                        <label>Binary Input</label>
+                        <input id="tmInput" placeholder="Enter binary string e.g. 0110">
+                        <button class="btn-run" onclick="runTM()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Run Machine
+                        </button>
+                        <div id="tmResult" class="result-box"></div>
+                    </div>
+                </div>
+
+                <!-- UNIT 6 -->
+                <div id="unit6" class="section">
+                    <div class="section-header">
+                        <span class="section-badge badge-orange">Unit 6</span>
+                        <h2>Halting Problem Demo</h2>
+                    </div>
+                    <div class="sim-card">
+                        <p class="info-text">The Halting Problem proves that no general algorithm can decide whether an arbitrary program will finish running or loop forever. This is one of the foundational results in computability theory — proved by Alan Turing in 1936.</p>
+                        <button class="btn-run" onclick="haltDemo()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                            Run Demo
+                        </button>
+                        <div id="haltResult" class="result-box"></div>
+                    </div>
+                </div>
+            </main>
+        </div>
+    </div>
+
+    <script src="script.js"></script>
+</body>
+</html>
