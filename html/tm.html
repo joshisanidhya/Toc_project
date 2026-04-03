@@ -1,0 +1,77 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Turing Machine — Automata Studio</title>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/tm.css">
+    <link rel="icon" href="../images/toc_logo.png" type="image/png">
+</head>
+<body class="app-mode">
+    <nav class="navbar" id="navbar">
+        <div class="nav-brand">
+            <img src="../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
+            <span>Automata Studio</span>
+        </div>
+        <div class="nav-links">
+            <a href="../index.html" class="nav-link">Product</a>
+            <a href="tm.html" class="nav-link active">Simulators</a>
+            <a href="index.html#features" class="nav-link">Features</a>
+            <a href="../index.html" class="nav-link return-home-btn">Return to Home</a>
+        </div>
+    </nav>
+    <div id="app-page">
+        <div class="app-layout">
+            <!-- Sidebar -->
+            <button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
+            <aside class="sidebar">
+                <h2 class="sidebar-title">Modules</h2>
+                <button class="sidebar-btn" data-unit="unit1" onclick="window.location.href='dfa.html'">
+                    <span class="sidebar-dot dot-purple"></span> DFA Simulator
+                </button>
+                <button class="sidebar-btn" data-unit="unit2" onclick="window.location.href='regex.html'">
+                    <span class="sidebar-dot dot-green"></span> Regex Checker
+                </button>
+                <button class="sidebar-btn" data-unit="unit3" onclick="window.location.href='cfg.html'">
+                    <span class="sidebar-dot dot-amber"></span> CFG Derivation
+                </button>
+                <button class="sidebar-btn" data-unit="unit4" onclick="window.location.href='pda.html'">
+                    <span class="sidebar-dot dot-cyan"></span> PDA Simulator
+                </button>
+                <button class="sidebar-btn" class="sidebar-btn active" data-unit="unit5" onclick="window.location.href='tm.html'">
+                    <span class="sidebar-dot dot-rose"></span> Turing Machine
+                </button>
+                <button class="sidebar-btn" data-unit="unit6" onclick="window.location.href='decidability.html'">
+                    <span class="sidebar-dot dot-orange"></span> Decidability
+                </button>
+                
+            </aside>
+            <main class="sim-content">
+                <div id="unit5" class="section active">
+                    <div class="section active">
+                        <span class="section active">Unit 5</span>
+                        <h2>Turing Machine — Binary Flip</h2>
+                    </div>
+                    <div class="sim-card">
+                        <label>Binary Input</label>
+                        <input id="tmInput" placeholder="Enter binary string e.g. 0110">
+                        <button class="btn-run" onclick="runTM()">
+                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
+                                stroke-width="2.5">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            Run Machine
+                        </button>
+                        <div id="tmResult" class="result-box"></div>
+                    </div>
+                </div>
+
+                <!-- UNIT 6 -->
+            </main>
+        </div>
+    </div>
+    <script src="../js/common.js"></script>
+    <script src="../js/tm.js"></script>
+</body>
+</html>
