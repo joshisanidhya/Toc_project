@@ -4,86 +4,192 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>DFA Simulator — Automata Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
+    <meta name="description" content="Simulate Deterministic Finite Automata with custom states, transitions, and input strings. Trace execution step by step.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
     <link rel="stylesheet" href="../css/dfa.css">
     <link rel="icon" href="../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--accent);
+            background: var(--accent-dim);
+            border: 1px solid rgba(210,255,0,0.25);
+            padding: 3px 10px;
+            border-radius: 99px;
+            margin-left: 10px;
+            vertical-align: middle;
+            letter-spacing: 0;
+        }
+        .recap-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent);
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+        .recap-link:hover { opacity: 1; text-decoration: underline; }
+    </style>
 </head>
 <body class="app-mode">
-    <nav class="navbar" id="navbar">
-        <div class="nav-brand">
-            <img src="../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
-            <span>Automata Studio</span>
-        </div>
-        <div class="nav-links">
-            <a href="../index.html" class="nav-link">Product</a>
-            <a href="dfa.html" class="nav-link active">Simulators</a>
-            <a href="index.html#features" class="nav-link">Features</a>
-            <a href="../index.html" class="nav-link return-home-btn">Return to Home</a>
-        </div>
-    </nav>
-    <div id="app-page">
-        <div class="app-layout">
-            <!-- Sidebar -->
-            <button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
-            <aside class="sidebar">
-                <h2 class="sidebar-title">Modules</h2>
-                <button class="sidebar-btn" class="sidebar-btn active" data-unit="unit1" onclick="window.location.href='dfa.html'">
-                    <span class="sidebar-dot dot-purple"></span> DFA Simulator
-                </button>
-                <button class="sidebar-btn" data-unit="unit2" onclick="window.location.href='regex.html'">
-                    <span class="sidebar-dot dot-green"></span> Regex Checker
-                </button>
-                <button class="sidebar-btn" data-unit="unit3" onclick="window.location.href='cfg.html'">
-                    <span class="sidebar-dot dot-amber"></span> CFG Derivation
-                </button>
-                <button class="sidebar-btn" data-unit="unit4" onclick="window.location.href='pda.html'">
-                    <span class="sidebar-dot dot-cyan"></span> PDA Simulator
-                </button>
-                <button class="sidebar-btn" data-unit="unit5" onclick="window.location.href='tm.html'">
-                    <span class="sidebar-dot dot-rose"></span> Turing Machine
-                </button>
-                <button class="sidebar-btn" data-unit="unit6" onclick="window.location.href='decidability.html'">
-                    <span class="sidebar-dot dot-orange"></span> Decidability
-                </button>
-                
-            </aside>
-            <main class="sim-content">
-                <div id="unit1" class="section active">
-                    <div class="section active">
-                        <span class="section active">Unit 1</span>
-                        <h2>DFA Simulator</h2>
+
+    <div class="page-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-inner">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">Modules</span>
+                    <button class="sidebar-close-btn" id="sidebarClose" aria-label="Close sidebar">✕</button>
+                </div>
+                                <div class="sidebar-section">
+                    <p class="sidebar-group-label">MODULES</p>
+                    <button class="sidebar-item active" onclick="location.href='dfa.html'">1. Foundations of Automata</button>
+                    <button class="sidebar-item " onclick="location.href='regex.html'">2. Regular Languages &amp; Expressions</button>
+                    <button class="sidebar-item " onclick="location.href='cfg.html'">3. Context-Free Grammars</button>
+                    <button class="sidebar-item " onclick="location.href='pda.html'">4. Pushdown Automata</button>
+                    <button class="sidebar-item " onclick="location.href='tm.html'">5. Turing Machines</button>
+                    <button class="sidebar-item " onclick="location.href='decidability.html'">6. Decidability &amp; Complexity</button>
+                </div>
+                <div class="sidebar-section">
+                    <p class="sidebar-group-label">RESOURCES</p>
+                    <button class="sidebar-item " onclick="location.href='recap.html'">📖 Theory Recap</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-area">
+
+            <nav class="navbar" id="navbar">
+                <div class="nav-brand">
+                    <img src="../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
+                    <span>Automata Studio</span>
+                </div>
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link">Product</a>
+                    <a href="dfa.html" class="nav-link active">Simulators</a>
+                    <a href="../index.html#features" class="nav-link">Features</a>
+                    <a href="../index.html" class="nav-cta">Return Home</a>
+                </div>
+            </nav>
+
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1 class="page-title">DFA Simulator</h1>
+                </div>
+                <div class="page-header-right">
+                    <p class="page-desc">Define a DFA using its formal 5-tuple (Q, Σ, δ, q₀, F). Enter all components, then run the simulator to trace execution step-by-step and visualize the state graph.</p>
+                    <a href="recap.html#dfa" class="recap-link">📖 DFA Theory &amp; Recap →</a>
+                </div>
+            </div>
+            <div class="page-divider"></div>
+
+            <div class="content-columns">
+
+                <!-- LEFT: DFA 5-Tuple Definition -->
+                <div class="sim-card">
+                    <h2 class="card-title">DFA Definition <span class="tuple-badge">M = (Q, Σ, δ, q₀, F)</span></h2>
+
+                    <!-- Q -->
+                    <div class="form-group">
+                        <label class="form-label">Q &mdash; States <span class="hint">(comma separated)</span></label>
+                        <input id="dfaStates" class="mono-input" placeholder="e.g. q0, q1, q2">
                     </div>
-                    <div class="sim-card">
-                        <label>Transitions <span class="hint">(Format: q0,a=q1)</span></label>
-                        <textarea id="dfaTransitions" placeholder="q0,a=q1&#10;q1,b=q2" rows="4"></textarea>
-                        <div class="input-row">
-                            <div class="input-group">
-                                <label>Start State</label>
-                                <input id="dfaStart" placeholder="e.g. q0">
-                            </div>
-                            <div class="input-group">
-                                <label>Accept States</label>
-                                <input id="dfaAccept" placeholder="Comma separated">
-                            </div>
+
+                    <!-- Σ -->
+                    <div class="form-group">
+                        <label class="form-label">Σ &mdash; Alphabet <span class="hint">(comma separated)</span></label>
+                        <input id="dfaAlphabet" class="mono-input" placeholder="e.g. a, b">
+                    </div>
+
+                    <!-- δ -->
+                    <div class="form-group">
+                        <label class="form-label">δ &mdash; Transition Function <span class="hint">(one per line: state,symbol=nextState)</span></label>
+                        <textarea id="dfaTransitions" class="mono-input" placeholder="q0,a=q1&#10;q1,b=q2&#10;q2,a=q2" rows="5"></textarea>
+                    </div>
+
+                    <!-- q0 and F -->
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">q₀ &mdash; Start State</label>
+                            <input id="dfaStart" class="mono-input" placeholder="e.g. q0">
                         </div>
-                        <label>Input String</label>
-                        <input id="dfaInput" placeholder="Enter input string">
-                        <button class="btn-run" onclick="runDFA()">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5">
-                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                            </svg>
-                            Run DFA
-                        </button>
+                        <div class="form-group">
+                            <label class="form-label">F &mdash; Accept States</label>
+                            <input id="dfaAccept" class="mono-input" placeholder="e.g. q2, q3">
+                        </div>
+                    </div>
+
+                    <!-- w -->
+                    <div class="form-group">
+                        <label class="form-label">w &mdash; Input String</label>
+                        <input id="dfaInput" class="mono-input" placeholder="Enter string to test">
+                    </div>
+
+                    <button class="btn-run" id="runBtn" onclick="runDFA()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        Run DFA
+                    </button>
+                </div>
+
+                <!-- RIGHT: Result & Graph -->
+                <div class="sim-card result-card">
+                    <h2 class="card-title">Result &amp; DFA Graph</h2>
+
+                    <div id="dfaResultContainer" class="result-container">
                         <div id="dfaResult" class="result-box"></div>
+                        <div id="dfaTraceContainer" class="trace-container"></div>
+                    </div>
+
+                    <div id="graphPlaceholder" class="graph-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <p>Fill in the 5-tuple and click <strong>Run DFA</strong> to simulate and visualize.</p>
+                    </div>
+
+                    <div class="dfa-graph-wrap" id="dfaGraphWrap">
+                        <p class="graph-section-label">State Diagram</p>
+                        <canvas id="dfaCanvas" class="dfa-canvas"></canvas>
                     </div>
                 </div>
 
-                <!-- UNIT 2 REGEX -->
-            </main>
+            </div>
         </div>
     </div>
+
+    <button id="sidebarToggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">☰ Modules</button>
+
+    <script src="../js/bg.js"></script>
     <script src="../js/common.js"></script>
     <script src="../js/dfa.js"></script>
+    <script src="../js/dfa_graph.js"></script>
+    <script>
+        initBgSlideshow([
+            '../images/dfa_bg.jpg',
+            '../images/rg_bg.jpg',
+            '../images/cfg_bg.jpg',
+            '../images/pda_bg.jpg',
+            '../images/tm_bg.jpg',
+            '../images/decid_bg.jpg'
+        ], 7000);
+
+        // Navbar scroll
+        window.addEventListener('scroll', () => {
+            const nb = document.getElementById('navbar');
+            if (nb) nb.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
 </body>
 </html>

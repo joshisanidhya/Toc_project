@@ -4,74 +4,200 @@
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Turing Machine — Automata Studio</title>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800;900&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/tm.css">
+    <meta name="description" content="Simulate a binary-flip Turing Machine. Observe the most powerful computation model running on an infinite tape.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../css/dfa.css">
     <link rel="icon" href="../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge {
+            font-family: var(--font-mono);
+            font-size: 0.72rem;
+            font-weight: 500;
+            color: var(--accent);
+            background: var(--accent-dim);
+            border: 1px solid rgba(210,255,0,0.25);
+            padding: 3px 10px;
+            border-radius: 99px;
+            margin-left: 10px;
+            vertical-align: middle;
+            letter-spacing: 0;
+        }
+        .recap-link {
+            display: inline-flex;
+            align-items: center;
+            gap: 6px;
+            margin-top: 10px;
+            font-size: 0.82rem;
+            font-weight: 600;
+            color: var(--accent);
+            opacity: 0.85;
+            transition: opacity 0.2s;
+        }
+        .recap-link:hover { opacity: 1; text-decoration: underline; }
+    </style>
 </head>
 <body class="app-mode">
-    <nav class="navbar" id="navbar">
-        <div class="nav-brand">
-            <img src="../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
-            <span>Automata Studio</span>
-        </div>
-        <div class="nav-links">
-            <a href="../index.html" class="nav-link">Product</a>
-            <a href="tm.html" class="nav-link active">Simulators</a>
-            <a href="index.html#features" class="nav-link">Features</a>
-            <a href="../index.html" class="nav-link return-home-btn">Return to Home</a>
-        </div>
-    </nav>
-    <div id="app-page">
-        <div class="app-layout">
-            <!-- Sidebar -->
-            <button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
-            <aside class="sidebar">
-                <h2 class="sidebar-title">Modules</h2>
-                <button class="sidebar-btn" data-unit="unit1" onclick="window.location.href='dfa.html'">
-                    <span class="sidebar-dot dot-purple"></span> DFA Simulator
-                </button>
-                <button class="sidebar-btn" data-unit="unit2" onclick="window.location.href='regex.html'">
-                    <span class="sidebar-dot dot-green"></span> Regex Checker
-                </button>
-                <button class="sidebar-btn" data-unit="unit3" onclick="window.location.href='cfg.html'">
-                    <span class="sidebar-dot dot-amber"></span> CFG Derivation
-                </button>
-                <button class="sidebar-btn" data-unit="unit4" onclick="window.location.href='pda.html'">
-                    <span class="sidebar-dot dot-cyan"></span> PDA Simulator
-                </button>
-                <button class="sidebar-btn" class="sidebar-btn active" data-unit="unit5" onclick="window.location.href='tm.html'">
-                    <span class="sidebar-dot dot-rose"></span> Turing Machine
-                </button>
-                <button class="sidebar-btn" data-unit="unit6" onclick="window.location.href='decidability.html'">
-                    <span class="sidebar-dot dot-orange"></span> Decidability
-                </button>
-                
-            </aside>
-            <main class="sim-content">
-                <div id="unit5" class="section active">
-                    <div class="section active">
-                        <span class="section active">Unit 5</span>
-                        <h2>Turing Machine — Binary Flip</h2>
+    <div class="page-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-inner">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">Modules</span>
+                    <button class="sidebar-close-btn" id="sidebarClose" aria-label="Close sidebar">✕</button>
+                </div>
+                                <div class="sidebar-section">
+                    <p class="sidebar-group-label">MODULES</p>
+                    <button class="sidebar-item " onclick="location.href='dfa.html'">1. Foundations of Automata</button>
+                    <button class="sidebar-item " onclick="location.href='regex.html'">2. Regular Languages &amp; Expressions</button>
+                    <button class="sidebar-item " onclick="location.href='cfg.html'">3. Context-Free Grammars</button>
+                    <button class="sidebar-item " onclick="location.href='pda.html'">4. Pushdown Automata</button>
+                    <button class="sidebar-item active" onclick="location.href='tm.html'">5. Turing Machines</button>
+                    <button class="sidebar-item " onclick="location.href='decidability.html'">6. Decidability &amp; Complexity</button>
+                </div>
+                <div class="sidebar-section">
+                    <p class="sidebar-group-label">RESOURCES</p>
+                    <button class="sidebar-item " onclick="location.href='recap.html'">📖 Theory Recap</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-area">
+            <nav class="navbar" id="navbar">
+                <div class="nav-brand">
+                    <img src="../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
+                    <span>Automata Studio</span>
+                </div>
+                <div class="nav-links">
+                    <a href="../index.html" class="nav-link">Product</a>
+                    <a href="tm.html" class="nav-link active">Simulators</a>
+                    <a href="../index.html#features" class="nav-link">Features</a>
+                    <a href="../index.html" class="nav-cta">Return Home</a>
+                </div>
+            </nav>
+
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1 class="page-title">Turing Machine</h1>
+                </div>
+                <div class="page-header-right">
+                    <p class="page-desc">Simulate a binary-flip Turing Machine defined by its 7-tuple (Q, Σ, Γ, δ, q₀, q_acc, q_rej). The machine scans the tape and flips every 0↔1 symbol, then halts.</p>
+                    <a href="recap.html#tm" class="recap-link">📖 Turing Machine Theory &amp; Recap →</a>
+                </div>
+            </div>
+            <div class="page-divider"></div>
+
+            <div class="content-columns">
+
+                <!-- LEFT: TM Definition -->
+                <div class="sim-card">
+                    <h2 class="card-title">TM Definition <span class="tuple-badge">M = (Q, Σ, Γ, δ, q₀, q_acc, q_rej)</span></h2>
+
+                    <!-- Q -->
+                    <div class="form-group">
+                        <label class="form-label">Q &mdash; States</label>
+                        <input class="mono-input" value="q0, q_acc, q_rej" readonly style="opacity:0.5;cursor:not-allowed;">
                     </div>
-                    <div class="sim-card">
-                        <label>Binary Input</label>
-                        <input id="tmInput" placeholder="Enter binary string e.g. 0110">
-                        <button class="btn-run" onclick="runTM()">
-                            <svg width="14" height="14" viewBox="0 0 24 24" fill="none" stroke="currentColor"
-                                stroke-width="2.5">
-                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                            </svg>
-                            Run Machine
-                        </button>
+
+                    <!-- Σ and Γ -->
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">Σ &mdash; Input Alphabet</label>
+                            <input class="mono-input" value="0, 1" readonly style="opacity:0.5;cursor:not-allowed;">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">Γ &mdash; Tape Alphabet</label>
+                            <input class="mono-input" value="0, 1, ⊔" readonly style="opacity:0.5;cursor:not-allowed;">
+                        </div>
+                    </div>
+
+                    <!-- δ -->
+                    <div class="form-group">
+                        <label class="form-label">δ &mdash; Transition Function</label>
+                        <textarea class="mono-input" rows="3" readonly style="opacity:0.5;cursor:not-allowed;font-size:0.78rem;">δ(q0, 0) = (q0, 1, R)   — flip 0→1, move Right
+δ(q0, 1) = (q0, 0, R)   — flip 1→0, move Right
+δ(q0, ⊔) = (q_acc, ⊔, R) — blank: Accept</textarea>
+                    </div>
+
+                    <!-- q0, q_acc, q_rej -->
+                    <div class="input-row">
+                        <div class="form-group">
+                            <label class="form-label">q₀ &mdash; Start State</label>
+                            <input class="mono-input" value="q0" readonly style="opacity:0.5;cursor:not-allowed;">
+                        </div>
+                        <div class="form-group">
+                            <label class="form-label">q_acc &mdash; Accept State</label>
+                            <input class="mono-input" value="q_acc" readonly style="opacity:0.5;cursor:not-allowed;">
+                        </div>
+                    </div>
+
+                    <!-- w: Input tape -->
+                    <div class="form-group">
+                        <label class="form-label">w &mdash; Input Tape <span class="hint">(binary string: 0s and 1s only)</span></label>
+                        <input id="tmInput" class="mono-input" placeholder="e.g. 0110 or 10101">
+                    </div>
+
+                    <button class="btn-run" id="runBtn" onclick="runTM()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                        </svg>
+                        Run Machine
+                    </button>
+                </div>
+
+                <!-- RIGHT: Result -->
+                <div class="sim-card result-card">
+                    <h2 class="card-title">Tape Output &amp; Trace</h2>
+
+                    <div id="tmResultContainer" class="result-container">
                         <div id="tmResult" class="result-box"></div>
+                        <div id="tmTraceContainer" class="trace-container"></div>
+                    </div>
+
+                    <div id="graphPlaceholder" class="graph-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35">
+                            <rect x="2" y="8" width="20" height="8" rx="1"/>
+                            <path d="M6 8V6M10 8V6M14 8V6M18 8V6"/>
+                            <path d="M6 16v2M10 16v2M14 16v2M18 16v2"/>
+                        </svg>
+                        <p>Enter a binary tape w and click <strong>Run Machine</strong>.</p>
+                        <p style="font-size:0.78rem;margin-top:6px;opacity:0.5;">Machine halts in q_acc after flipping all bits.</p>
                     </div>
                 </div>
 
-                <!-- UNIT 6 -->
-            </main>
+            </div>
         </div>
     </div>
+
+    <button id="sidebarToggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">☰ Modules</button>
+
+    <script src="../js/bg.js"></script>
     <script src="../js/common.js"></script>
     <script src="../js/tm.js"></script>
+    <script>
+        const _origRunTM = window.runTM;
+        window.runTM = function() {
+            _origRunTM && _origRunTM();
+            const c = document.getElementById('tmResultContainer');
+            const p = document.getElementById('graphPlaceholder');
+            if (c) c.classList.add('open');
+            if (p) p.style.display = 'none';
+        };
+        window.addEventListener('scroll', () => {
+            const nb = document.getElementById('navbar');
+            if (nb) nb.classList.toggle('scrolled', window.scrollY > 50);
+        });
+        initBgSlideshow([
+            '../images/tm_bg.jpg',
+            '../images/dfa_bg.jpg',
+            '../images/rg_bg.jpg',
+            '../images/cfg_bg.jpg',
+            '../images/pda_bg.jpg',
+            '../images/decid_bg.jpg'
+        ], 7000);
+    </script>
 </body>
 </html>
