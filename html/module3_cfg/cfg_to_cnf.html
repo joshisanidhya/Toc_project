@@ -1,0 +1,109 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFG → CNF Converter — Automata Studio</title>
+    <meta name="description" content="Convert a Context-Free Grammar to Chomsky Normal Form step-by-step.">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/module3_cfg/cfg.css"><link rel="icon" href="../../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge{font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(210,255,0,.25);padding:3px 10px;border-radius:99px;margin-left:10px;vertical-align:middle}
+        .recap-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.82rem;font-weight:600;color:var(--accent);opacity:.85;transition:opacity .2s}
+        .recap-link:hover{opacity:1;text-decoration:underline}
+        #cnfStepsWrap{display:none;margin-top:16px;overflow-y:auto;max-height:600px}
+        .ex-btn{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:99px;font-family:var(--font-ui);font-size:.8rem;font-weight:600;cursor:pointer;transition:all var(--transition)}
+        .ex-btn:hover{border-color:var(--accent);color:var(--accent)}
+        .step-badge-list{display:flex;flex-direction:column;gap:10px;margin-top:14px}
+        .step-list-item{display:flex;align-items:center;gap:10px;padding:10px 14px;background:rgba(255,255,255,0.04);border:1px solid var(--border);border-radius:8px;font-size:0.83rem}
+        .step-num{background:var(--accent-dim);color:var(--accent);font-weight:800;font-size:0.7rem;padding:2px 8px;border-radius:99px;flex-shrink:0}
+    </style>
+</head>
+<body class="app-mode">
+<div class="page-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+            <div class="sidebar-header"><span class="sidebar-title">Modules</span><button class="sidebar-close-btn" id="sidebarClose">✕</button></div>
+            <div class="sidebar-section">
+                <p class="sidebar-group-label">MODULES</p>
+                <button class="sidebar-item" onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                <button class="sidebar-item active" onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                <button class="sidebar-item" onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                <button class="sidebar-item" onclick="location.href='../module6_decidability/decidability.html'">6. Decidability &amp; Complexity</button>
+            </div>
+            <div class="sidebar-section"><p class="sidebar-group-label">RESOURCES</p><button class="sidebar-item" onclick="location.href='../module6_decidability/recap.html'">📖 Theory Recap</button></div>
+        </div>
+    </aside>
+    <div class="main-area">
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand"><img src="../../images/toc_logo.png" alt="Logo" class="nav-logo"><span>Automata Studio</span></div>
+            <div class="nav-links">
+                <a href="../../index.html" class="nav-link">Product</a><a href="cfg.html" class="nav-link active">Simulators</a>
+                <a href="../../index.html#features" class="nav-link">Features</a><a href="../../index.html" class="nav-cta">Return Home</a>
+            </div>
+        </nav>
+        <div class="page-header">
+            <div class="page-header-left"><h1 class="page-title">CFG → CNF <span class="tuple-badge">🔄 Module 3</span></h1></div>
+            <div class="page-header-right">
+                <p class="page-desc">Convert any Context-Free Grammar to <strong>Chomsky Normal Form</strong> through the 5 Sipser steps: START → DEL → UNIT → TERM → BIN. Each step is shown with the updated rule set.</p>
+                <a href='../module6_decidability/recap.html#cfg' class="recap-link">📖 CNF Theory →</a>
+            </div>
+        </div>
+        <div class="page-divider"></div>
+        <div class="module-tab-bar">
+            <a href="cfg.html" class="module-tab"><span class="tab-icon">📝</span> CFG Derivation</a>
+            <a href="parse_tree.html" class="module-tab"><span class="tab-icon">🌲</span> Parse Tree</a>
+            <a href="cfg_to_cnf.html" class="module-tab active"><span class="tab-icon">🔄</span> CFG → CNF</a>
+        </div>
+        <div class="content-columns">
+            <div class="sim-card">
+                <h2 class="card-title">Input Grammar</h2>
+                <div class="form-group">
+                    <label class="form-label">S &mdash; Start Variable</label>
+                    <input id="cnfStart" class="mono-input" placeholder="e.g. S">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">R &mdash; Production Rules <span class="hint">(one per line: A->aB|ε)</span></label>
+                    <textarea id="cnfRules" class="mono-input" rows="7" placeholder="S->ASA|aB&#10;A->B|S&#10;B->b|ε"></textarea>
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button class="btn-run" style="flex:1" onclick="convertCNF()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Convert to CNF
+                    </button>
+                    <button class="ex-btn" onclick="loadCNFExample()">Load Example</button>
+                </div>
+                <div style="margin-top:22px">
+                    <div class="lc-ex-label" style="margin-bottom:10px">CNF Conversion Steps</div>
+                    <div class="step-badge-list">
+                        <div class="step-list-item"><span class="step-num">STEP 0</span><span style="color:var(--muted)">Original grammar</span></div>
+                        <div class="step-list-item"><span class="step-num">START</span><span style="color:var(--muted)">Add new start symbol S₀</span></div>
+                        <div class="step-list-item"><span class="step-num">DEL</span><span style="color:var(--muted)">Eliminate ε-rules</span></div>
+                        <div class="step-list-item"><span class="step-num">UNIT</span><span style="color:var(--muted)">Eliminate unit rules (A → B)</span></div>
+                        <div class="step-list-item"><span class="step-num">TERM</span><span style="color:var(--muted)">Isolate terminals in long rules</span></div>
+                        <div class="step-list-item"><span class="step-num">BIN</span><span style="color:var(--muted)">Binarize rules with |RHS| ≥ 3</span></div>
+                    </div>
+                </div>
+            </div>
+            <div class="sim-card result-card" style="overflow-y:auto">
+                <h2 class="card-title">Step-by-Step CNF Output</h2>
+                <div id="cnfResultContainer" class="result-container"><div id="cnfResult" class="result-box"></div></div>
+                <div id="cnfPlaceholder" class="graph-placeholder">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35"><path d="M4 6h16M4 10h16M4 14h10M4 18h6"/></svg>
+                    <p>Enter a grammar and click <strong>Convert to CNF</strong>.</p>
+                    <p style="font-size:.78rem;opacity:.5;margin-top:4px">Each of the 5 steps will be shown with the full rule set.</p>
+                </div>
+                <div id="cnfStepsWrap"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
+<script src="../../js/bg.js"></script><script src="../../js/common.js"></script><script src="../../js/module3_cfg/cfg_to_cnf.js"></script>
+<script>
+    initBgSlideshow(['../../images/cfg_bg.jpg','../../images/dfa_bg.jpg','../../images/rg_bg.jpg','../../images/pda_bg.jpg','../../images/tm_bg.jpg','../../images/decid_bg.jpg'],7000);
+    window.addEventListener('scroll',()=>{const nb=document.getElementById('navbar');if(nb)nb.classList.toggle('scrolled',window.scrollY>50);});
+</script>
+</body></html>

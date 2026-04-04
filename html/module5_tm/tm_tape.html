@@ -1,0 +1,261 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>TM Tape Animation — Automata Studio</title>
+    <meta name="description" content="Animated Turing Machine tape simulator with head movement and step-by-step execution.">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/module5_tm/tm.css"><link rel="icon" href="../../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge{font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(210,255,0,.25);padding:3px 10px;border-radius:99px;margin-left:10px;vertical-align:middle}
+        .recap-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.82rem;font-weight:600;color:var(--accent);opacity:.85;transition:opacity .2s}
+        .recap-link:hover{opacity:1;text-decoration:underline}
+        /* Tape */
+        .tape-wrap{overflow-x:auto;padding:10px 0;margin:16px 0}
+        .tape-row{display:flex;align-items:flex-start;gap:0;justify-content:center;min-width:max-content;margin:0 auto}
+        .tape-cell-wrap{display:flex;flex-direction:column;align-items:center;gap:4px}
+        .tape-cell{
+            width:46px;height:46px;display:flex;align-items:center;justify-content:center;
+            font-family:var(--font-mono);font-weight:700;font-size:1.05rem;
+            border:1px solid rgba(255,255,255,0.15);background:rgba(255,255,255,0.04);
+            color:rgba(255,255,255,0.8);transition:all 0.3s ease;position:relative;
+        }
+        .tape-cell.head{
+            background:var(--accent-dim)!important;border-color:var(--accent)!important;
+            color:var(--accent)!important;box-shadow:0 0 16px rgba(210,255,0,.25);
+            transform:scaleY(1.08);z-index:2;
+        }
+        .tape-cell.written{background:rgba(56,189,248,.12)!important;border-color:rgba(56,189,248,.4)!important;color:#38bdf8!important;animation:flashCell .4s ease}
+        .head-arrow{font-size:1.1rem;color:var(--accent);animation:bounce .6s ease infinite alternate;line-height:1}
+        @keyframes bounce{from{transform:translateY(0)}to{transform:translateY(-4px)}}
+        @keyframes flashCell{0%{background:rgba(210,255,0,.3)!important}100%{background:rgba(56,189,248,.12)!important}}
+        .tape-idx{font-size:.6rem;color:rgba(255,255,255,.2);font-family:var(--font-mono)}
+        /* Controls */
+        .ctrl-btn{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);padding:8px 16px;border-radius:99px;font-family:var(--font-ui);font-size:.82rem;font-weight:600;cursor:pointer;transition:all var(--transition)}
+        .ctrl-btn:hover:not(:disabled){border-color:var(--accent);color:var(--accent)}
+        .ctrl-btn:disabled{opacity:.3;cursor:default}
+        .ctrl-btn.primary{background:var(--accent);color:#000;border-color:var(--accent)}
+        .ctrl-btn.primary:hover{background:#deff33}
+        .state-display{font-family:var(--font-mono);font-size:.9rem;font-weight:700;padding:6px 16px;border-radius:99px;background:var(--accent-dim);border:1px solid rgba(210,255,0,.3);color:var(--accent)}
+        .state-display.accept{background:rgba(34,197,94,.12);border-color:rgba(34,197,94,.4);color:#22c55e}
+        .state-display.reject{background:rgba(244,63,94,.12);border-color:rgba(244,63,94,.4);color:#f43f5e}
+        .log-box{font-family:var(--font-mono);font-size:.78rem;color:var(--muted);background:rgba(0,0,0,.35);border:1px solid var(--border);border-radius:var(--radius);padding:12px 14px;max-height:200px;overflow-y:auto;line-height:1.8}
+        .log-entry{padding:2px 0;border-bottom:1px solid rgba(255,255,255,.04)}
+        .log-entry:last-child{color:var(--accent);font-weight:600}
+        .speed-label{font-size:.75rem;color:var(--muted);margin-bottom:4px;font-weight:600;text-transform:uppercase;letter-spacing:.5px}
+    </style>
+</head>
+<body class="app-mode">
+<div class="page-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+            <div class="sidebar-header"><span class="sidebar-title">Modules</span><button class="sidebar-close-btn" id="sidebarClose">✕</button></div>
+            <div class="sidebar-section">
+                <p class="sidebar-group-label">MODULES</p>
+                <button class="sidebar-item" onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                <button class="sidebar-item" onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                <button class="sidebar-item" onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                <button class="sidebar-item active" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                <button class="sidebar-item" onclick="location.href='../module6_decidability/decidability.html'">6. Decidability &amp; Complexity</button>
+            </div>
+            <div class="sidebar-section"><p class="sidebar-group-label">RESOURCES</p><button class="sidebar-item" onclick="location.href='../module6_decidability/recap.html'">📖 Theory Recap</button></div>
+        </div>
+    </aside>
+    <div class="main-area">
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand"><img src="../../images/toc_logo.png" alt="Logo" class="nav-logo"><span>Automata Studio</span></div>
+            <div class="nav-links"><a href="../../index.html" class="nav-link">Product</a><a href="tm.html" class="nav-link active">Simulators</a><a href="../../index.html#features" class="nav-link">Features</a><a href="../../index.html" class="nav-cta">Return Home</a></div>
+        </nav>
+        <div class="page-header">
+            <div class="page-header-left"><h1 class="page-title">TM Tape Animator <span class="tuple-badge">🎞️ Module 5</span></h1></div>
+            <div class="page-header-right">
+                <p class="page-desc">Watch a Turing Machine execute step-by-step on an animated tape. The head moves left/right and writes symbols in real time. Uses the binary-flip TM (0↔1).</p>
+                <a href='../module6_decidability/recap.html#tm' class="recap-link">📖 Turing Machine Theory →</a>
+            </div>
+        </div>
+        <div class="page-divider"></div>
+        <div class="module-tab-bar">
+            <a href="tm.html" class="module-tab"><span class="tab-icon">🎞️</span> TM Simulator</a>
+            <a href="tm_tape.html" class="module-tab active"><span class="tab-icon">📼</span> Tape Animation</a>
+        </div>
+
+        <!-- FULL WIDTH layout for the tape -->
+        <div class="sim-card" style="margin-bottom:20px">
+            <div style="display:flex;align-items:center;justify-content:space-between;flex-wrap:wrap;gap:12px;margin-bottom:16px">
+                <h2 class="card-title" style="margin-bottom:0">Live Tape Execution</h2>
+                <div id="stateDisplay" class="state-display">State: q0</div>
+            </div>
+            <!-- Tape visual -->
+            <div class="tape-wrap" id="tapeWrap">
+                <div class="tape-row" id="tapeRow"></div>
+            </div>
+            <!-- Controls -->
+            <div style="display:flex;align-items:center;gap:10px;flex-wrap:wrap;margin-top:8px">
+                <button class="ctrl-btn primary" id="playBtn" onclick="tmPlay()">▶ Play</button>
+                <button class="ctrl-btn" id="stepBtn" onclick="tmStep()">⏭ Step</button>
+                <button class="ctrl-btn" id="resetBtn" onclick="tmReset()">↺ Reset</button>
+                <div style="margin-left:8px">
+                    <div class="speed-label">Speed</div>
+                    <input type="range" id="speedSlider" min="100" max="1000" value="500" step="100" style="width:100px;accent-color:var(--accent)">
+                </div>
+                <div style="margin-left:8px;font-size:.8rem;color:var(--muted)">Step: <span id="stepCount">0</span></div>
+            </div>
+        </div>
+
+        <div class="content-columns">
+            <div class="sim-card">
+                <h2 class="card-title">Machine Configuration</h2>
+                <div class="form-group">
+                    <label class="form-label">w &mdash; Input Tape <span class="hint">(binary string)</span></label>
+                    <input id="tapeInput" class="mono-input" placeholder="e.g. 0110 or 10101" value="0110">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">Machine Type</label>
+                    <select id="machineType" class="mono-input">
+                        <option value="flip">Binary Flipper (0↔1)</option>
+                        <option value="identity">Identity (copy tape)</option>
+                        <option value="incr">Binary Increment (+1)</option>
+                    </select>
+                </div>
+                <button class="btn-run" onclick="tmInit()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Load &amp; Ready
+                </button>
+                <div style="margin-top:20px">
+                    <div class="lc-ex-label" style="margin-bottom:8px">Transition Function (δ)</div>
+                    <div id="tmDeltaDisplay" style="font-family:var(--font-mono);font-size:.78rem;color:var(--muted);line-height:1.8;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:12px 14px"></div>
+                </div>
+            </div>
+            <div class="sim-card">
+                <h2 class="card-title">Execution Log</h2>
+                <div class="log-box" id="logBox"><div class="log-entry" style="color:var(--muted)">Load a tape and press Play or Step...</div></div>
+                <div style="margin-top:14px">
+                    <div class="lc-ex-label" style="margin-bottom:8px">Configuration History</div>
+                    <div id="configHistory" style="font-family:var(--font-mono);font-size:.75rem;color:var(--muted);max-height:140px;overflow-y:auto;line-height:1.9"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
+<script src="../../js/bg.js"></script><script src="../../js/common.js"></script>
+<script>
+/* ===== TM Tape Animation JS ===== */
+const MACHINES = {
+    flip: {
+        name: 'Binary Flipper',
+        delta: { 'q0,0':['q0','1','R'], 'q0,1':['q0','0','R'], 'q0,⊔':['q_acc','⊔','R'] },
+        display: 'δ(q0, 0) = (q0, 1, R)\nδ(q0, 1) = (q0, 0, R)\nδ(q0, ⊔) = (q_acc, ⊔, R)'
+    },
+    identity: {
+        name: 'Identity',
+        delta: { 'q0,0':['q0','0','R'], 'q0,1':['q0','1','R'], 'q0,⊔':['q_acc','⊔','R'] },
+        display: 'δ(q0, 0) = (q0, 0, R)\nδ(q0, 1) = (q0, 1, R)\nδ(q0, ⊔) = (q_acc, ⊔, R)'
+    },
+    incr: {
+        name: 'Binary Increment',
+        delta: {
+            'q0,0':['q0','0','R'], 'q0,1':['q0','1','R'], 'q0,⊔':['q1','⊔','L'],
+            'q1,0':['q_acc','1','L'], 'q1,1':['q1','0','L'], 'q1,⊔':['q_acc','1','L']
+        },
+        display: 'δ(q0,0)=(q0,0,R)\nδ(q0,1)=(q0,1,R)\nδ(q0,⊔)=(q1,⊔,L)\nδ(q1,0)=(q_acc,1,L)\nδ(q1,1)=(q1,0,L)\nδ(q1,⊔)=(q_acc,1,L)'
+    }
+};
+
+let tape=[], head=0, state='q0', halted=false, playInterval=null, stepNum=0, machine=MACHINES.flip, logLines=[], writtenCells=new Set();
+
+function tmInit() {
+    clearInterval(playInterval); playInterval=null;
+    const input=document.getElementById('tapeInput').value.trim()||'0';
+    const mtype=document.getElementById('machineType').value;
+    machine=MACHINES[mtype]||MACHINES.flip;
+    tape=[...input,'⊔','⊔','⊔','⊔','⊔'];
+    head=0; state='q0'; halted=false; stepNum=0; logLines=[]; writtenCells=new Set();
+    document.getElementById('tmDeltaDisplay').textContent=machine.display;
+    document.getElementById('configHistory').innerHTML='';
+    renderTape(); renderLog(); updateStateDisplay();
+    document.getElementById('playBtn').textContent='▶ Play';
+    document.getElementById('stepCount').textContent='0';
+}
+
+function tmStep() {
+    if(halted) return;
+    const sym=tape[head]||'⊔';
+    const key=state+','+sym;
+    const trans=machine.delta[key];
+    if(!trans){
+        state='q_rej'; halted=true;
+        logLines.push(`✗ No transition for (${state}, ${sym}) — REJECTED`);
+        renderLog(); renderTape(); updateStateDisplay(); return;
+    }
+    const [ns,write,dir]=trans;
+    const oldState=state;
+    tape[head]=write; writtenCells.add(head);
+    state=ns;
+    logLines.push(`Step ${++stepNum}: δ(${oldState}, ${sym}) = (${ns}, ${write}, ${dir})`);
+    if(dir==='R') head++; else if(dir==='L') head=Math.max(0,head-1);
+    if(head>=tape.length) tape.push('⊔');
+    if(state==='q_acc'||state==='q_rej'){ halted=true; clearInterval(playInterval); playInterval=null; document.getElementById('playBtn').textContent='▶ Play'; logLines.push(state==='q_acc'?'✓ ACCEPTED':'✗ REJECTED'); }
+    renderTape(); renderLog(); updateStateDisplay();
+    document.getElementById('stepCount').textContent=stepNum;
+    addConfigHistory();
+}
+
+function tmPlay() {
+    if(halted) { tmInit(); return; }
+    if(playInterval){ clearInterval(playInterval); playInterval=null; document.getElementById('playBtn').textContent='▶ Play'; return; }
+    document.getElementById('playBtn').textContent='⏸ Pause';
+    const speed=parseInt(document.getElementById('speedSlider').value);
+    playInterval=setInterval(()=>{ if(halted){ clearInterval(playInterval); playInterval=null; document.getElementById('playBtn').textContent='▶ Play'; return; } tmStep(); },1100-speed);
+}
+
+function tmReset() { clearInterval(playInterval); playInterval=null; document.getElementById('playBtn').textContent='▶ Play'; tmInit(); }
+
+function renderTape() {
+    const row=document.getElementById('tapeRow'); if(!row) return;
+    const SHOW=Math.max(tape.length, head+5);
+    row.innerHTML='';
+    for(let i=0;i<SHOW;i++){
+        const wrap=document.createElement('div'); wrap.className='tape-cell-wrap';
+        const cell=document.createElement('div'); cell.className='tape-cell';
+        if(i===head) cell.classList.add('head');
+        else if(writtenCells.has(i)&&i!==head) cell.classList.add('written');
+        cell.textContent=tape[i]||'⊔';
+        const arrow=document.createElement('div'); arrow.className='head-arrow';
+        arrow.textContent=i===head?'▲':'';
+        const idx=document.createElement('div'); idx.className='tape-idx'; idx.textContent=i;
+        wrap.appendChild(cell); wrap.appendChild(arrow); wrap.appendChild(idx);
+        row.appendChild(wrap);
+    }
+}
+
+function renderLog() {
+    const box=document.getElementById('logBox'); if(!box) return;
+    box.innerHTML=logLines.slice(-30).map(l=>`<div class="log-entry">${l}</div>`).join('');
+    box.scrollTop=box.scrollHeight;
+}
+
+function updateStateDisplay() {
+    const el=document.getElementById('stateDisplay'); if(!el) return;
+    el.textContent='State: '+state;
+    el.className='state-display';
+    if(state==='q_acc') el.classList.add('accept');
+    if(state==='q_rej') el.classList.add('reject');
+}
+
+function addConfigHistory() {
+    const el=document.getElementById('configHistory'); if(!el) return;
+    const config=tape.map((s,i)=>i===head?`[${s}]`:s).join('');
+    el.innerHTML+=`<div>${stepNum}. &nbsp;(${state}) &nbsp;${config}</div>`;
+    el.scrollTop=el.scrollHeight;
+}
+
+document.addEventListener('DOMContentLoaded',()=>{ tmInit(); });
+</script>
+<script>
+    initBgSlideshow(['../../images/tm_bg.jpg','../../images/dfa_bg.jpg','../../images/rg_bg.jpg','../../images/cfg_bg.jpg','../../images/pda_bg.jpg','../../images/decid_bg.jpg'],7000);
+    window.addEventListener('scroll',()=>{const nb=document.getElementById('navbar');if(nb)nb.classList.toggle('scrolled',window.scrollY>50);});
+</script>
+</body></html>

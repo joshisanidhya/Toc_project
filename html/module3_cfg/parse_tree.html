@@ -1,0 +1,101 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Parse Tree Generator — Automata Studio</title>
+    <meta name="description" content="Generate parse trees for context-free grammars. Input a grammar and string to visualize the derivation tree.">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/module3_cfg/cfg.css"><link rel="icon" href="../../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge{font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(210,255,0,.25);padding:3px 10px;border-radius:99px;margin-left:10px;vertical-align:middle}
+        .recap-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.82rem;font-weight:600;color:var(--accent);opacity:.85;transition:opacity .2s}
+        .recap-link:hover{opacity:1;text-decoration:underline}
+        #ptTreeWrap,#ptStepsWrap{display:none;margin-top:16px}
+        .ex-btn{background:rgba(255,255,255,.06);border:1px solid var(--border);color:var(--text);padding:7px 14px;border-radius:99px;font-family:var(--font-ui);font-size:.8rem;font-weight:600;cursor:pointer;transition:all var(--transition)}
+        .ex-btn:hover{border-color:var(--accent);color:var(--accent)}
+    </style>
+</head>
+<body class="app-mode">
+<div class="page-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+            <div class="sidebar-header"><span class="sidebar-title">Modules</span><button class="sidebar-close-btn" id="sidebarClose">✕</button></div>
+            <div class="sidebar-section">
+                <p class="sidebar-group-label">MODULES</p>
+                <button class="sidebar-item" onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                <button class="sidebar-item active" onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                <button class="sidebar-item" onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                <button class="sidebar-item" onclick="location.href='../module6_decidability/decidability.html'">6. Decidability &amp; Complexity</button>
+            </div>
+            <div class="sidebar-section"><p class="sidebar-group-label">RESOURCES</p><button class="sidebar-item" onclick="location.href='../module6_decidability/recap.html'">📖 Theory Recap</button></div>
+        </div>
+    </aside>
+    <div class="main-area">
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand"><img src="../../images/toc_logo.png" alt="Logo" class="nav-logo"><span>Automata Studio</span></div>
+            <div class="nav-links">
+                <a href="../../index.html" class="nav-link">Product</a>
+                <a href="cfg.html" class="nav-link active">Simulators</a>
+                <a href="../../index.html#features" class="nav-link">Features</a>
+                <a href="../../index.html" class="nav-cta">Return Home</a>
+            </div>
+        </nav>
+        <div class="page-header">
+            <div class="page-header-left"><h1 class="page-title">Parse Tree <span class="tuple-badge">🌲 Module 3</span></h1></div>
+            <div class="page-header-right">
+                <p class="page-desc">Enter a CFG and an input string to generate the <strong>parse tree</strong> and <strong>leftmost derivation</strong>. Uses depth-bounded recursive-descent expansion.</p>
+                <a href='../module6_decidability/recap.html#cfg' class="recap-link">📖 CFG & Parse Tree Theory →</a>
+            </div>
+        </div>
+        <div class="page-divider"></div>
+        <div class="module-tab-bar">
+            <a href="cfg.html" class="module-tab"><span class="tab-icon">📝</span> CFG Derivation</a>
+            <a href="parse_tree.html" class="module-tab active"><span class="tab-icon">🌲</span> Parse Tree</a>
+            <a href="cfg_to_cnf.html" class="module-tab"><span class="tab-icon">🔄</span> CFG → CNF</a>
+        </div>
+        <div class="content-columns">
+            <div class="sim-card">
+                <h2 class="card-title">Grammar &amp; Input</h2>
+                <div class="form-group">
+                    <label class="form-label">S &mdash; Start Variable</label>
+                    <input id="ptStart" class="mono-input" placeholder="e.g. S">
+                </div>
+                <div class="form-group">
+                    <label class="form-label">R &mdash; Production Rules <span class="hint">(one per line: S->aSb|ε)</span></label>
+                    <textarea id="ptRules" class="mono-input" rows="6" placeholder="S->aSb|ε&#10;A->aA|a"></textarea>
+                </div>
+                <div class="form-group">
+                    <label class="form-label">w &mdash; Input String <span class="hint">(leave blank for ε)</span></label>
+                    <input id="ptInput" class="mono-input" placeholder="e.g. aabb">
+                </div>
+                <div style="display:flex;gap:8px;flex-wrap:wrap">
+                    <button class="btn-run" style="flex:1" onclick="generateParseTree()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                        Generate Tree
+                    </button>
+                    <button class="ex-btn" onclick="loadPTExample()">Load Example</button>
+                </div>
+            </div>
+            <div class="sim-card result-card">
+                <h2 class="card-title">Parse Tree &amp; Derivation</h2>
+                <div id="ptResultContainer" class="result-container"><div id="ptResult" class="result-box"></div></div>
+                <div id="ptPlaceholder" class="graph-placeholder">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35"><circle cx="12" cy="5" r="2"/><line x1="12" y1="7" x2="12" y2="10"/><circle cx="7" cy="13" r="2"/><circle cx="17" cy="13" r="2"/><line x1="11" y1="10" x2="8" y2="11"/><line x1="13" y1="10" x2="16" y2="11"/><line x1="7" y1="15" x2="5" y2="19"/><line x1="7" y1="15" x2="9" y2="19"/><line x1="17" y1="15" x2="15" y2="19"/><line x1="17" y1="15" x2="19" y2="19"/></svg>
+                    <p>Enter a grammar and string, then click <strong>Generate Tree</strong>.</p>
+                </div>
+                <div id="ptTreeWrap"></div>
+                <div id="ptStepsWrap"></div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
+<script src="../../js/bg.js"></script><script src="../../js/common.js"></script><script src="../../js/module3_cfg/parse_tree.js"></script>
+<script>
+    initBgSlideshow(['../../images/cfg_bg.jpg','../../images/dfa_bg.jpg','../../images/rg_bg.jpg','../../images/pda_bg.jpg','../../images/tm_bg.jpg','../../images/decid_bg.jpg'],7000);
+    window.addEventListener('scroll',()=>{const nb=document.getElementById('navbar');if(nb)nb.classList.toggle('scrolled',window.scrollY>50);});
+</script>
+</body></html>

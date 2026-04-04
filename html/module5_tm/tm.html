@@ -8,8 +8,8 @@
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
     <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
-    <link rel="stylesheet" href="../css/dfa.css">
-    <link rel="icon" href="../images/toc_logo.png" type="image/png">
+    <link rel="stylesheet" href="../../css/module5_tm/tm.css">
+    <link rel="icon" href="../../images/toc_logo.png" type="image/png">
     <style>
         .tuple-badge {
             font-family: var(--font-mono);
@@ -50,16 +50,16 @@
                 </div>
                                 <div class="sidebar-section">
                     <p class="sidebar-group-label">MODULES</p>
-                    <button class="sidebar-item " onclick="location.href='dfa.html'">1. Foundations of Automata</button>
-                    <button class="sidebar-item " onclick="location.href='regex.html'">2. Regular Languages &amp; Expressions</button>
-                    <button class="sidebar-item " onclick="location.href='cfg.html'">3. Context-Free Grammars</button>
-                    <button class="sidebar-item " onclick="location.href='pda.html'">4. Pushdown Automata</button>
-                    <button class="sidebar-item active" onclick="location.href='tm.html'">5. Turing Machines</button>
-                    <button class="sidebar-item " onclick="location.href='decidability.html'">6. Decidability &amp; Complexity</button>
+                    <button class="sidebar-item " onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                    <button class="sidebar-item " onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                    <button class="sidebar-item " onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                    <button class="sidebar-item " onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                    <button class="sidebar-item active" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                    <button class="sidebar-item " onclick="location.href='../module6_decidability/decidability.html'">6. Decidability &amp; Complexity</button>
                 </div>
                 <div class="sidebar-section">
                     <p class="sidebar-group-label">RESOURCES</p>
-                    <button class="sidebar-item " onclick="location.href='recap.html'">📖 Theory Recap</button>
+                    <button class="sidebar-item " onclick="location.href='../module6_decidability/recap.html'">📖 Theory Recap</button>
                 </div>
             </div>
         </aside>
@@ -68,14 +68,14 @@
         <div class="main-area">
             <nav class="navbar" id="navbar">
                 <div class="nav-brand">
-                    <img src="../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
+                    <img src="../../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
                     <span>Automata Studio</span>
                 </div>
                 <div class="nav-links">
-                    <a href="../index.html" class="nav-link">Product</a>
+                    <a href="../../index.html" class="nav-link">Product</a>
                     <a href="tm.html" class="nav-link active">Simulators</a>
-                    <a href="../index.html#features" class="nav-link">Features</a>
-                    <a href="../index.html" class="nav-cta">Return Home</a>
+                    <a href="../../index.html#features" class="nav-link">Features</a>
+                    <a href="../../index.html" class="nav-cta">Return Home</a>
                 </div>
             </nav>
 
@@ -85,10 +85,16 @@
                 </div>
                 <div class="page-header-right">
                     <p class="page-desc">Simulate a binary-flip Turing Machine defined by its 7-tuple (Q, Σ, Γ, δ, q₀, q_acc, q_rej). The machine scans the tape and flips every 0↔1 symbol, then halts.</p>
-                    <a href="recap.html#tm" class="recap-link">📖 Turing Machine Theory &amp; Recap →</a>
+                    <a href='../module6_decidability/recap.html#tm' class="recap-link">📖 Turing Machine Theory &amp; Recap →</a>
                 </div>
             </div>
             <div class="page-divider"></div>
+
+            <!-- MODULE TAB BAR -->
+            <div class="module-tab-bar">
+                <a href="tm.html" class="module-tab active"><span class="tab-icon">🎞️</span> TM Simulator</a>
+                <a href="tm_tape.html" class="module-tab"><span class="tab-icon">📼</span> Tape Animation</a>
+            </div>
 
             <div class="content-columns">
 
@@ -174,9 +180,9 @@
 
     <button id="sidebarToggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">☰ Modules</button>
 
-    <script src="../js/bg.js"></script>
-    <script src="../js/common.js"></script>
-    <script src="../js/tm.js"></script>
+    <script src="../../js/bg.js"></script>
+    <script src="../../js/common.js"></script>
+    <script src="../../js/module5_tm/tm.js"></script>
     <script>
         const _origRunTM = window.runTM;
         window.runTM = function() {
@@ -191,12 +197,12 @@
             if (nb) nb.classList.toggle('scrolled', window.scrollY > 50);
         });
         initBgSlideshow([
-            '../images/tm_bg.jpg',
-            '../images/dfa_bg.jpg',
-            '../images/rg_bg.jpg',
-            '../images/cfg_bg.jpg',
-            '../images/pda_bg.jpg',
-            '../images/decid_bg.jpg'
+            '../../images/tm_bg.jpg',
+            '../../images/dfa_bg.jpg',
+            '../../images/rg_bg.jpg',
+            '../../images/cfg_bg.jpg',
+            '../../images/pda_bg.jpg',
+            '../../images/decid_bg.jpg'
         ], 7000);
     </script>
 </body>

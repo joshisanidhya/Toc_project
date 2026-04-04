@@ -1,0 +1,169 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>CFG ↔ PDA Explanation — Automata Studio</title>
+    <meta name="description" content="Explore the equivalence between Context-Free Grammars and Pushdown Automata with interactive step-by-step explanations.">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/module3_cfg/cfg.css"><link rel="icon" href="../../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge{font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(210,255,0,.25);padding:3px 10px;border-radius:99px;margin-left:10px;vertical-align:middle}
+        .recap-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.82rem;font-weight:600;color:var(--accent);opacity:.85;transition:opacity .2s}
+        .recap-link:hover{opacity:1;text-decoration:underline}
+        .eq-step{background:rgba(0,0,0,0.35);border:1px solid var(--border);border-radius:var(--radius);padding:18px 20px;margin-bottom:14px;transition:border-color .2s,box-shadow .2s;cursor:pointer}
+        .eq-step:hover,.eq-step.open{border-color:var(--accent-glow);box-shadow:0 0 0 1px var(--accent-glow) inset}
+        .eq-step-header{display:flex;align-items:center;gap:12px;margin-bottom:0}
+        .eq-step-num{background:var(--accent);color:#000;font-weight:800;font-size:.7rem;padding:3px 10px;border-radius:99px;flex-shrink:0}
+        .eq-step-title{font-weight:700;color:var(--text);font-size:.9rem}
+        .eq-step-body{display:none;margin-top:14px;font-size:.83rem;color:var(--muted);line-height:1.75}
+        .eq-step.open .eq-step-body{display:block}
+        .eq-step-body code{font-family:var(--font-mono);background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px;font-size:.8rem}
+        .eq-step-body ul{margin:8px 0 0 16px}
+        .eq-step-body li{margin-bottom:4px}
+        .dir-btn{display:inline-flex;align-items:center;gap:6px;padding:9px 20px;border-radius:99px;font-weight:700;font-size:.85rem;cursor:pointer;border:1px solid var(--accent);background:transparent;color:var(--accent);transition:all var(--transition);margin-right:8px;margin-bottom:8px}
+        .dir-btn.active,.dir-btn:hover{background:var(--accent);color:#000}
+        .direction-panel{display:none}.direction-panel.active{display:block}
+    </style>
+</head>
+<body class="app-mode">
+<div class="page-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+            <div class="sidebar-header"><span class="sidebar-title">Modules</span><button class="sidebar-close-btn" id="sidebarClose">✕</button></div>
+            <div class="sidebar-section">
+                <p class="sidebar-group-label">MODULES</p>
+                <button class="sidebar-item" onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                <button class="sidebar-item" onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                <button class="sidebar-item active" onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                <button class="sidebar-item" onclick="location.href='../module6_decidability/decidability.html'">6. Decidability &amp; Complexity</button>
+            </div>
+            <div class="sidebar-section"><p class="sidebar-group-label">RESOURCES</p><button class="sidebar-item" onclick="location.href='../module6_decidability/recap.html'">📖 Theory Recap</button></div>
+        </div>
+    </aside>
+    <div class="main-area">
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand"><img src="../../images/toc_logo.png" alt="Logo" class="nav-logo"><span>Automata Studio</span></div>
+            <div class="nav-links"><a href="../../index.html" class="nav-link">Product</a><a href='../module4_pda/pda.html' class="nav-link active">Simulators</a><a href="../../index.html#features" class="nav-link">Features</a><a href="../../index.html" class="nav-cta">Return Home</a></div>
+        </nav>
+        <div class="page-header">
+            <div class="page-header-left"><h1 class="page-title">CFG ↔ PDA <span class="tuple-badge">🔗 Module 4</span></h1></div>
+            <div class="page-header-right">
+                <p class="page-desc">Context-Free Grammars and Pushdown Automata are <strong>equivalent</strong> in expressive power. Explore both directions of the proof through animated step-by-step explanations.</p>
+                <a href='../module6_decidability/recap.html#pda' class="recap-link">📖 PDA Theory →</a>
+            </div>
+        </div>
+        <div class="page-divider"></div>
+        <div class="module-tab-bar">
+            <a href='../module4_pda/pda.html' class="module-tab"><span class="tab-icon">🔄</span> PDA Simulator</a>
+            <a href="cfg_pda.html" class="module-tab active"><span class="tab-icon">🔗</span> CFG ↔ PDA</a>
+        </div>
+        <div class="content-columns">
+            <!-- LEFT: Direction selector + theorem -->
+            <div class="sim-card">
+                <h2 class="card-title">Equivalence Theorem</h2>
+                <div style="background:rgba(210,255,0,0.06);border:1px solid rgba(210,255,0,0.2);border-radius:10px;padding:14px 18px;margin-bottom:20px">
+                    <div style="font-size:.88rem;font-weight:700;color:var(--accent);margin-bottom:6px">Theorem (Sipser 2.20)</div>
+                    <div style="font-size:.83rem;color:var(--muted);line-height:1.65">A language is context-free if and only if some <strong style="color:rgba(255,255,255,.8)">pushdown automaton</strong> recognizes it.<br><br>
+                    i.e. &nbsp;<code style="font-family:var(--font-mono);background:rgba(255,255,255,.07);padding:2px 6px;border-radius:4px">L is CFL ⟺ ∃ PDA P such that L(P) = L</code></div>
+                </div>
+                <div class="lc-ex-label" style="margin-bottom:10px">Choose Direction</div>
+                <div>
+                    <button class="dir-btn active" id="btn-cfg2pda" onclick="showDir('cfg2pda')">CFG → PDA</button>
+                    <button class="dir-btn" id="btn-pda2cfg" onclick="showDir('pda2cfg')">PDA → CFG</button>
+                </div>
+                <div style="margin-top:20px;font-size:.82rem;color:var(--muted);line-height:1.65">
+                    <strong style="color:rgba(255,255,255,.8)">Key Insight:</strong> A PDA can simulate leftmost derivation of a CFG using its stack. Conversely, any PDA can be converted into a CFG whose productions mirror the PDA's transitions.
+                </div>
+                <div style="margin-top:18px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px">
+                    <div class="lc-ex-label" style="margin-bottom:8px">Class Hierarchy</div>
+                    <div style="font-family:var(--font-mono);font-size:.8rem;line-height:2;color:rgba(255,255,255,.7)">
+                        Regular ⊂ CFL ⊂ CSL ⊂ RE<br>
+                        DFA ⊂ PDA = CFG ⊂ LBA ⊂ TM
+                    </div>
+                </div>
+            </div>
+            <!-- RIGHT: Steps -->
+            <div class="sim-card result-card" style="overflow-y:auto">
+                <h2 class="card-title">Step-by-Step Proof</h2>
+                <!-- CFG → PDA direction -->
+                <div class="direction-panel active" id="panel-cfg2pda">
+                    <div style="font-size:.83rem;color:var(--muted);margin-bottom:16px;line-height:1.65">
+                        Given CFG G = (V, Σ, R, S), construct PDA P that accepts L(G) by simulating leftmost derivation on its stack. <em>Click each step to expand.</em>
+                    </div>
+                    <div class="eq-step open" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 1</span><span class="eq-step-title">Initialize the Stack</span></div>
+                        <div class="eq-step-body">Push the bottom-of-stack marker <code>$</code> then the start variable <code>S</code>. The PDA starts in state <code>q_start</code> and immediately moves to <code>q_loop</code>:
+                        <ul><li>δ(q_start, ε, ε) = {(q_loop, S$)}</li></ul></div>
+                    </div>
+                    <div class="eq-step" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 2</span><span class="eq-step-title">Expand Non-terminals (Predict)</span></div>
+                        <div class="eq-step-body">Whenever the top of the stack is a non-terminal <code>A ∈ V</code>, nondeterministically replace it with any RHS of a rule <code>A → w</code>:
+                        <ul><li>For each rule A → w₁w₂…wₖ in R:</li><li>δ(q_loop, ε, A) = {(q_loop, w₁w₂…wₖ)}</li></ul>
+                        This simulates a leftmost derivation step.</div>
+                    </div>
+                    <div class="eq-step" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 3</span><span class="eq-step-title">Match Terminals (Scan)</span></div>
+                        <div class="eq-step-body">Whenever the top of the stack is a terminal <code>a ∈ Σ</code> that matches the current input symbol, pop it and advance the head:
+                        <ul><li>For each terminal a ∈ Σ:</li><li>δ(q_loop, a, a) = {(q_loop, ε)}</li></ul></div>
+                    </div>
+                    <div class="eq-step" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 4</span><span class="eq-step-title">Accept on Empty Stack</span></div>
+                        <div class="eq-step-body">When the stack bottom marker <code>$</code> is on top and all input is consumed, move to the accept state:
+                        <ul><li>δ(q_loop, ε, $) = {(q_accept, ε)}</li></ul>
+                        The resulting PDA P has states {q_start, q_loop, q_accept} and L(P) = L(G). ∎</div>
+                    </div>
+                </div>
+                <!-- PDA → CFG direction -->
+                <div class="direction-panel" id="panel-pda2cfg">
+                    <div style="font-size:.83rem;color:var(--muted);margin-bottom:16px;line-height:1.65">
+                        Given PDA P, construct CFG G such that L(G) = L(P). Each PDA transition becomes a set of CFG productions. <em>Click each step to expand.</em>
+                    </div>
+                    <div class="eq-step open" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 1</span><span class="eq-step-title">Normalize the PDA</span></div>
+                        <div class="eq-step-body">First bring P to a standard form where:
+                        <ul><li>It has a single start state <code>q₀</code> and single accept state <code>q_acc</code></li><li>It accepts only by empty stack</li><li>Each transition either pushes or pops exactly one symbol</li></ul></div>
+                    </div>
+                    <div class="eq-step" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 2</span><span class="eq-step-title">Introduce Variables A[pq]</span></div>
+                        <div class="eq-step-body">Create a grammar variable <code>A[pq]</code> for every pair of states (p, q) in P. This variable generates all strings that take P from state p with empty stack to state q with empty stack:
+                        <ul><li>Start symbol: S → A[q₀, q_acc]</li></ul></div>
+                    </div>
+                    <div class="eq-step" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 3</span><span class="eq-step-title">Add Productions (via-state split)</span></div>
+                        <div class="eq-step-body">For every pair (p, q) and every intermediate state r:
+                        <ul><li>A[pq] → A[pr] A[rq]</li></ul>
+                        This captures strings that take P from p to some midpoint r, then from r to q.</div>
+                    </div>
+                    <div class="eq-step" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 4</span><span class="eq-step-title">Add Productions (push-pop pairs)</span></div>
+                        <div class="eq-step-body">For every push transition δ(p, a, ε) containing (r, t) and every pop transition δ(s, b, t) containing (q, ε):
+                        <ul><li>A[pq] → a A[rs] b</li></ul>
+                        Here a is pushed at p and t is popped at some later state s reaching q.</div>
+                    </div>
+                    <div class="eq-step" onclick="this.classList.toggle('open')">
+                        <div class="eq-step-header"><span class="eq-step-num">STEP 5</span><span class="eq-step-title">Add ε-productions</span></div>
+                        <div class="eq-step-body">For each state p:
+                        <ul><li>A[pp] → ε</li></ul>
+                        Represents staying in the same state without consuming input. The resulting CFG G has L(G) = L(P). ∎</div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
+<script src="../../js/bg.js"></script><script src="../../js/common.js"></script>
+<script>
+    function showDir(dir) {
+        ['cfg2pda','pda2cfg'].forEach(d => {
+            document.getElementById('panel-'+d).classList.toggle('active', d===dir);
+            document.getElementById('btn-'+d).classList.toggle('active', d===dir);
+        });
+    }
+    initBgSlideshow(['../../images/pda_bg.jpg','../../images/dfa_bg.jpg','../../images/rg_bg.jpg','../../images/cfg_bg.jpg','../../images/tm_bg.jpg','../../images/decid_bg.jpg'],7000);
+    window.addEventListener('scroll',()=>{const nb=document.getElementById('navbar');if(nb)nb.classList.toggle('scrolled',window.scrollY>50);});
+</script>
+</body></html>

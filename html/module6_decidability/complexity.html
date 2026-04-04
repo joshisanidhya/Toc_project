@@ -1,0 +1,204 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Complexity Visualizer — Automata Studio</title>
+    <meta name="description" content="Visualize algorithmic complexity growth: O(n), O(n²), O(2ⁿ) and more with interactive charts.">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/module6_decidability/decidability.css"><link rel="icon" href="../../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge{font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(210,255,0,.25);padding:3px 10px;border-radius:99px;margin-left:10px;vertical-align:middle}
+        .recap-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.82rem;font-weight:600;color:var(--accent);opacity:.85;transition:opacity .2s}
+        .recap-link:hover{opacity:1;text-decoration:underline}
+        canvas{display:block;width:100%;border-radius:var(--radius);background:rgba(0,0,0,.3);border:1px solid var(--border)}
+        .class-toggle{display:flex;align-items:center;gap:8px;padding:9px 14px;border-radius:8px;border:1px solid var(--border);cursor:pointer;transition:all var(--transition);background:rgba(255,255,255,.03);user-select:none}
+        .class-toggle:hover{background:rgba(255,255,255,.06)}
+        .class-toggle.active{border-color:var(--tc, var(--accent))}
+        .class-dot{width:12px;height:12px;border-radius:50%;flex-shrink:0}
+        .class-name{font-family:var(--font-mono);font-size:.83rem;font-weight:600;color:var(--text)}
+        .class-desc{font-size:.73rem;color:var(--muted);flex:1}
+        .n-slider{width:100%;accent-color:var(--accent)}
+        .complexity-table{width:100%;border-collapse:collapse;font-family:var(--font-mono);font-size:.78rem;margin-top:10px}
+        .complexity-table th{color:var(--muted);font-size:.65rem;text-transform:uppercase;letter-spacing:1px;padding:6px 10px;border-bottom:1px solid var(--border);text-align:left}
+        .complexity-table td{padding:5px 10px;border-bottom:1px solid rgba(255,255,255,.04);color:rgba(255,255,255,.8)}
+    </style>
+</head>
+<body class="app-mode">
+<div class="page-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+            <div class="sidebar-header"><span class="sidebar-title">Modules</span><button class="sidebar-close-btn" id="sidebarClose">✕</button></div>
+            <div class="sidebar-section">
+                <p class="sidebar-group-label">MODULES</p>
+                <button class="sidebar-item" onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                <button class="sidebar-item" onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                <button class="sidebar-item" onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                <button class="sidebar-item active" onclick="location.href='decidability.html'">6. Decidability &amp; Complexity</button>
+            </div>
+            <div class="sidebar-section"><p class="sidebar-group-label">RESOURCES</p><button class="sidebar-item" onclick="location.href='recap.html'">📖 Theory Recap</button></div>
+        </div>
+    </aside>
+    <div class="main-area">
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand"><img src="../../images/toc_logo.png" alt="Logo" class="nav-logo"><span>Automata Studio</span></div>
+            <div class="nav-links"><a href="../../index.html" class="nav-link">Product</a><a href="decidability.html" class="nav-link active">Simulators</a><a href="../../index.html#features" class="nav-link">Features</a><a href="../../index.html" class="nav-cta">Return Home</a></div>
+        </nav>
+        <div class="page-header">
+            <div class="page-header-left"><h1 class="page-title">Complexity Visualizer <span class="tuple-badge">⏱️ Module 6</span></h1></div>
+            <div class="page-header-right">
+                <p class="page-desc">Compare how different algorithmic complexity classes grow as input size n increases. Toggle classes on/off and drag the n slider to explore the differences between polynomial and exponential growth.</p>
+                <a href='recap.html#decidability' class="recap-link">📖 Complexity Theory →</a>
+            </div>
+        </div>
+        <div class="page-divider"></div>
+        <div class="module-tab-bar">
+            <a href="decidability.html" class="module-tab"><span class="tab-icon">❌</span> Halting Problem</a>
+            <a href="complexity.html" class="module-tab active"><span class="tab-icon">⏱️</span> Complexity</a>
+            <a href="pvsnp.html" class="module-tab"><span class="tab-icon">🧠</span> P vs NP</a>
+        </div>
+        <div class="content-columns">
+            <!-- LEFT: Controls -->
+            <div class="sim-card">
+                <h2 class="card-title">Complexity Classes</h2>
+                <div style="display:flex;flex-direction:column;gap:8px;margin-bottom:22px" id="toggleList"></div>
+                <div class="form-group">
+                    <label class="form-label">n &mdash; Input Size <span class="hint" id="nVal"></span></label>
+                    <input type="range" id="nSlider" class="n-slider" min="5" max="30" value="15" oninput="onNChange()">
+                </div>
+                <div style="margin-top:20px">
+                    <div class="lc-ex-label" style="margin-bottom:8px">Value Table (at current n)</div>
+                    <table class="complexity-table">
+                        <thead><tr><th>f(n)</th><th>Class</th><th>Value at n</th></tr></thead>
+                        <tbody id="valTableBody"></tbody>
+                    </table>
+                </div>
+            </div>
+            <!-- RIGHT: Chart -->
+            <div class="sim-card result-card">
+                <h2 class="card-title">Growth Chart</h2>
+                <canvas id="complexityChart" height="320"></canvas>
+                <div style="margin-top:14px;font-size:.78rem;color:var(--muted);line-height:1.7">
+                    <strong style="color:rgba(255,255,255,.8)">Note:</strong> Exponential functions like O(2ⁿ) grow <em>astronomically</em> faster than polynomial ones. The chart y-axis is capped for readability — the actual values diverge far beyond what's visible.
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
+<script src="../../js/bg.js"></script><script src="../../js/common.js"></script>
+<script>
+const CLASSES = [
+    { id:'O1',    label:'O(1)',   color:'#38bdf8', fn: n => 1,         desc:'Constant' },
+    { id:'Ologn', label:'O(log n)',color:'#a78bfa', fn: n => Math.log2(n), desc:'Logarithmic' },
+    { id:'On',    label:'O(n)',   color:'#D2FF00', fn: n => n,         desc:'Linear' },
+    { id:'Onlogn',label:'O(n log n)',color:'#fb923c', fn: n => n*Math.log2(n), desc:'Linearithmic' },
+    { id:'On2',   label:'O(n²)', color:'#f97316', fn: n => n*n,       desc:'Quadratic' },
+    { id:'On3',   label:'O(n³)', color:'#f43f5e', fn: n => n*n*n,     desc:'Cubic' },
+    { id:'O2n',   label:'O(2ⁿ)', color:'#dc2626', fn: n => Math.pow(2,n), desc:'Exponential' },
+    { id:'Onf',   label:'O(n!)', color:'#9f1239', fn: n => {let f=1;for(let i=2;i<=n;i++)f*=i;return f;}, desc:'Factorial' }
+];
+let active = new Set(['On','On2','O2n']);
+
+function buildToggles(){
+    const list=document.getElementById('toggleList');
+    list.innerHTML=CLASSES.map(c=>`
+        <div class="class-toggle ${active.has(c.id)?'active':''}" id="tog-${c.id}" style="--tc:${c.color}" onclick="toggleClass('${c.id}')">
+            <div class="class-dot" style="background:${c.color}"></div>
+            <span class="class-name">${c.label}</span>
+            <span class="class-desc">${c.desc}</span>
+        </div>`).join('');
+}
+function toggleClass(id){
+    active.has(id)?active.delete(id):active.add(id);
+    document.getElementById('tog-'+id)?.classList.toggle('active',active.has(id));
+    drawChart();
+}
+function onNChange(){ drawChart(); }
+
+function drawChart(){
+    const canvas=document.getElementById('complexityChart');
+    const n=parseInt(document.getElementById('nSlider').value);
+    document.getElementById('nVal').textContent=`= ${n}`;
+    const DPR=window.devicePixelRatio||1;
+    const W=canvas.offsetWidth||500, H=320;
+    canvas.width=W*DPR; canvas.height=H*DPR;
+    canvas.style.height=H+'px';
+    const ctx=canvas.getContext('2d');
+    ctx.scale(DPR,DPR);
+    ctx.clearRect(0,0,W,H);
+
+    const pad={l:50,r:20,t:20,b:40};
+    const cw=W-pad.l-pad.r, ch=H-pad.t-pad.b;
+    const maxX=n;
+    const activeCls=CLASSES.filter(c=>active.has(c.id));
+
+    // Compute max Y (capped)
+    let maxY=10;
+    for(let x=2;x<=maxX;x++){
+        activeCls.forEach(c=>{
+            const v=c.fn(x); if(isFinite(v)&&v>maxY) maxY=Math.min(v,maxX*maxX*2+100);
+        });
+    }
+
+    // Grid
+    ctx.strokeStyle='rgba(255,255,255,0.06)'; ctx.lineWidth=1;
+    for(let i=0;i<=5;i++){
+        const y=pad.t+ch*(1-i/5);
+        ctx.beginPath();ctx.moveTo(pad.l,y);ctx.lineTo(pad.l+cw,y);ctx.stroke();
+        ctx.fillStyle='rgba(255,255,255,0.3)';ctx.font='10px Inter,sans-serif';ctx.textAlign='right';ctx.textBaseline='middle';
+        ctx.fillText(Math.round(maxY*i/5),pad.l-6,y);
+    }
+    for(let i=0;i<=maxX;i+=Math.max(1,Math.floor(maxX/8))){
+        const x=pad.l+cw*i/maxX;
+        ctx.beginPath();ctx.moveTo(x,pad.t);ctx.lineTo(x,pad.t+ch);ctx.stroke();
+        ctx.fillStyle='rgba(255,255,255,0.3)';ctx.textAlign='center';ctx.textBaseline='top';
+        ctx.fillText(i,x,pad.t+ch+6);
+    }
+
+    // Axes
+    ctx.strokeStyle='rgba(255,255,255,0.2)';ctx.lineWidth=1.5;
+    ctx.beginPath();ctx.moveTo(pad.l,pad.t);ctx.lineTo(pad.l,pad.t+ch);ctx.lineTo(pad.l+cw,pad.t+ch);ctx.stroke();
+    ctx.fillStyle='rgba(255,255,255,0.4)';ctx.font='11px Inter,sans-serif';
+    ctx.textAlign='center';ctx.textBaseline='top';ctx.fillText('n (input size)',pad.l+cw/2,pad.t+ch+22);
+
+    // Plot each class
+    activeCls.forEach(c=>{
+        ctx.strokeStyle=c.color; ctx.lineWidth=2; ctx.beginPath();
+        let started=false;
+        for(let x=1;x<=maxX;x++){
+            const v=c.fn(x);
+            if(!isFinite(v)||v>maxY*1.5) continue;
+            const px=pad.l+cw*x/maxX;
+            const py=pad.t+ch*(1-Math.min(v,maxY)/maxY);
+            started?(ctx.lineTo(px,py)):(ctx.moveTo(px,py),started=true);
+        }
+        ctx.stroke();
+        // Label at end
+        const lv=c.fn(maxX);
+        if(isFinite(lv)&&lv<=maxY){
+            const px=pad.l+cw, py=pad.t+ch*(1-lv/maxY);
+            ctx.fillStyle=c.color;ctx.font='bold 11px JetBrains Mono,monospace';ctx.textAlign='left';ctx.textBaseline='middle';
+            ctx.fillText(c.label,px+4,Math.max(pad.t+8,Math.min(py,pad.t+ch-8)));
+        }
+    });
+
+    // Value table
+    const tbody=document.getElementById('valTableBody');
+    tbody.innerHTML=CLASSES.map(c=>{
+        const v=c.fn(n);
+        const vStr=!isFinite(v)?'∞':v>1e15?'> 10¹⁵':v>1e9?v.toExponential(2):Math.round(v).toLocaleString();
+        return `<tr><td style="color:${c.color}">${c.label}</td><td style="color:var(--muted)">${c.desc}</td><td>${vStr}</td></tr>`;
+    }).join('');
+}
+
+document.addEventListener('DOMContentLoaded',()=>{ buildToggles(); drawChart(); });
+window.addEventListener('resize',drawChart);
+</script>
+<script>
+    initBgSlideshow(['../../images/decid_bg.jpg','../../images/dfa_bg.jpg','../../images/rg_bg.jpg','../../images/cfg_bg.jpg','../../images/pda_bg.jpg','../../images/tm_bg.jpg'],7000);
+    window.addEventListener('scroll',()=>{const nb=document.getElementById('navbar');if(nb)nb.classList.toggle('scrolled',window.scrollY>50);});
+</script>
+</body></html>

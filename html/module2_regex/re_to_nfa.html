@@ -1,0 +1,214 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>RE → NFA Converter — Automata Studio</title>
+    <meta name="description" content="Convert a Regular Expression to an NFA step-by-step using Thompson's Construction. Visualize ε-NFA fragments and state diagrams.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/module2_regex/regex.css">
+    <link rel="icon" href="../../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge { font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(210,255,0,.25);padding:3px 10px;border-radius:99px;margin-left:10px;vertical-align:middle;letter-spacing:0; }
+        .recap-link  { display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.82rem;font-weight:600;color:var(--accent);opacity:.85;transition:opacity .2s; }
+        .recap-link:hover { opacity:1;text-decoration:underline; }
+
+        /* Step navigator */
+        .step-nav {
+            display: none; align-items: center; gap: 10px;
+            margin-bottom: 16px;
+        }
+        .step-nav.visible { display: flex; }
+        .step-btn {
+            background: rgba(255,255,255,0.06); border: 1px solid var(--border);
+            color: var(--text); padding: 7px 16px; border-radius: 99px;
+            font-family: var(--font-ui); font-size: 0.82rem; font-weight: 600;
+            cursor: pointer; transition: all var(--transition);
+        }
+        .step-btn:hover:not(:disabled) { border-color: var(--accent); color: var(--accent); }
+        .step-btn:disabled { opacity: 0.3; cursor: default; }
+        .step-box {
+            background: rgba(0,0,0,0.35); border: 1px solid var(--border);
+            border-radius: var(--radius); padding: 16px 18px;
+            margin-bottom: 16px; min-height: 90px;
+        }
+        /* NFA graph */
+        .nfa-graph-wrap { display: none; flex-direction: column; gap: 10px; margin-top: 16px; }
+        .nfa-graph-wrap.visible { display: flex; }
+        .nfa-canvas { width:100%; border-radius:var(--radius); background:rgba(0,0,0,0.3); border:1px solid var(--border); display:block; }
+        #nfaTableWrap { display:none; margin-top:16px; }
+
+        /* Operator reference */
+        .op-grid { display:grid; grid-template-columns:1fr 1fr; gap:6px; margin-top:14px; }
+        .op-item { background:rgba(255,255,255,0.04); border:1px solid var(--border); border-radius:8px; padding:8px 12px; }
+        .op-sym  { font-family:var(--font-mono); font-size:0.85rem; color:var(--accent); font-weight:700; }
+        .op-desc { font-size:0.75rem; color:var(--muted); margin-top:2px; }
+    </style>
+</head>
+<body class="app-mode">
+<div class="page-shell">
+
+    <!-- SIDEBAR -->
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+            <div class="sidebar-header">
+                <span class="sidebar-title">Modules</span>
+                <button class="sidebar-close-btn" id="sidebarClose" aria-label="Close sidebar">✕</button>
+            </div>
+            <div class="sidebar-section">
+                <p class="sidebar-group-label">MODULES</p>
+                <button class="sidebar-item" onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                <button class="sidebar-item active" onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                <button class="sidebar-item" onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                <button class="sidebar-item" onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                <button class="sidebar-item" onclick="location.href='../module6_decidability/decidability.html'">6. Decidability &amp; Complexity</button>
+            </div>
+            <div class="sidebar-section">
+                <p class="sidebar-group-label">RESOURCES</p>
+                <button class="sidebar-item" onclick="location.href='../module6_decidability/recap.html'">📖 Theory Recap</button>
+            </div>
+        </div>
+    </aside>
+
+    <!-- MAIN -->
+    <div class="main-area">
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand">
+                <img src="../../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
+                <span>Automata Studio</span>
+            </div>
+            <div class="nav-links">
+                <a href="../../index.html" class="nav-link">Product</a>
+                <a href="regex.html" class="nav-link active">Simulators</a>
+                <a href="../../index.html#features" class="nav-link">Features</a>
+                <a href="../../index.html" class="nav-cta">Return Home</a>
+            </div>
+        </nav>
+
+        <div class="page-header">
+            <div class="page-header-left">
+                <h1 class="page-title">RE → NFA <span class="tuple-badge">🔄 Module 2</span></h1>
+            </div>
+            <div class="page-header-right">
+                <p class="page-desc">Enter a regular expression and convert it to an ε-NFA step-by-step using <strong>Thompson's Construction</strong>. Each operator builds a 2-state NFA fragment connected by ε-transitions.</p>
+                <a href='../module6_decidability/recap.html#regex' class="recap-link">📖 Regex & NFA Theory →</a>
+            </div>
+        </div>
+        <div class="page-divider"></div>
+
+        <!-- MODULE TAB BAR -->
+        <div class="module-tab-bar">
+            <a href="regex.html" class="module-tab">
+                <span class="tab-icon">✅</span> Regex Checker
+            </a>
+            <a href="re_to_nfa.html" class="module-tab active">
+                <span class="tab-icon">🔄</span> RE → NFA
+            </a>
+            <a href='../module1_dfa/nfa_to_dfa.html' class="module-tab">
+                <span class="tab-icon">🔁</span> NFA → DFA
+            </a>
+        </div>
+
+        <div class="content-columns">
+
+            <!-- LEFT: Input -->
+            <div class="sim-card">
+                <h2 class="card-title">Regular Expression Input</h2>
+
+                <div class="form-group">
+                    <label class="form-label">R &mdash; Regular Expression</label>
+                    <input id="reInput" class="mono-input" placeholder="e.g. (a|b)*abb  or  a*b+c?">
+                </div>
+
+                <button class="btn-run" onclick="convertRE()">
+                    <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Convert to NFA
+                </button>
+
+                <!-- Operator reference -->
+                <div style="margin-top:24px">
+                    <div class="lc-ex-label" style="margin-bottom:10px">Supported Operators</div>
+                    <div class="op-grid">
+                        <div class="op-item"><div class="op-sym">a | b</div><div class="op-desc">Union — a or b</div></div>
+                        <div class="op-item"><div class="op-sym">ab</div><div class="op-desc">Concatenation — a followed by b</div></div>
+                        <div class="op-item"><div class="op-sym">a*</div><div class="op-desc">Kleene star — zero or more a</div></div>
+                        <div class="op-item"><div class="op-sym">a+</div><div class="op-desc">One or more a</div></div>
+                        <div class="op-item"><div class="op-sym">a?</div><div class="op-desc">Optional — zero or one a</div></div>
+                        <div class="op-item"><div class="op-sym">( )</div><div class="op-desc">Grouping</div></div>
+                    </div>
+                </div>
+
+                <!-- Quick examples -->
+                <div style="margin-top:20px">
+                    <div class="lc-ex-label" style="margin-bottom:8px">Quick Examples</div>
+                    <div style="display:flex;flex-wrap:wrap;gap:6px">
+                        <button class="step-btn" onclick="document.getElementById('reInput').value='(a|b)*abb'">( a|b )*abb</button>
+                        <button class="step-btn" onclick="document.getElementById('reInput').value='a*b+'">a*b+</button>
+                        <button class="step-btn" onclick="document.getElementById('reInput').value='(0|1)*01'">(0|1)*01</button>
+                        <button class="step-btn" onclick="document.getElementById('reInput').value='a?b*c'">a?b*c</button>
+                    </div>
+                </div>
+            </div>
+
+            <!-- RIGHT: Steps + Graph -->
+            <div class="sim-card result-card">
+                <h2 class="card-title">Step-by-Step Conversion</h2>
+
+                <!-- Result pill -->
+                <div id="reResultContainer" class="result-container">
+                    <div id="reResult" class="result-box"></div>
+                </div>
+
+                <!-- Step navigator -->
+                <div class="step-nav" id="stepNav">
+                    <button class="step-btn" id="prevStep" onclick="prevStep()">← Prev</button>
+                    <button class="step-btn" id="nextStep" onclick="nextStep()">Next →</button>
+                </div>
+                <div class="step-box" id="stepBox" style="display:none">
+                    <div style="color:var(--muted);font-size:0.83rem">Hit <strong>Convert to NFA</strong> to start.</div>
+                </div>
+
+                <!-- Placeholder -->
+                <div id="graphPlaceholder" class="graph-placeholder">
+                    <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35">
+                        <circle cx="12" cy="12" r="8"/><path d="M12 8v4l3 3"/><path d="M3.05 12H5M19 12h1.95M12 5V3.05M12 21v-1.95"/>
+                    </svg>
+                    <p>Enter a regular expression and click <strong>Convert to NFA</strong>.</p>
+                </div>
+
+                <!-- NFA transition table -->
+                <div id="nfaTableWrap"></div>
+
+                <!-- NFA Graph -->
+                <div class="nfa-graph-wrap" id="nfaGraphWrap">
+                    <p class="graph-section-label">ε-NFA State Diagram</p>
+                    <canvas id="nfaCanvas" class="nfa-canvas"></canvas>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+
+<button id="sidebarToggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">☰ Modules</button>
+
+<script src="../../js/bg.js"></script>
+<script src="../../js/common.js"></script>
+<script src="../../js/module2_regex/re_to_nfa.js"></script>
+<script>
+    // Show step box after convert
+    const _orig = window.convertRE;
+    window.convertRE = function() {
+        _orig && _orig();
+        const sb = document.getElementById('stepBox');
+        const sn = document.getElementById('stepNav');
+        if (sb) sb.style.display = 'block';
+        if (sn) sn.classList.add('visible');
+    };
+    initBgSlideshow(['../../images/rg_bg.jpg','../../images/dfa_bg.jpg','../../images/cfg_bg.jpg','../../images/pda_bg.jpg','../../images/tm_bg.jpg','../../images/decid_bg.jpg'],7000);
+    window.addEventListener('scroll',()=>{ const nb=document.getElementById('navbar'); if(nb) nb.classList.toggle('scrolled',window.scrollY>50); });
+</script>
+</body>
+</html>

@@ -1,0 +1,193 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Language Checker — Automata Studio</title>
+    <meta name="description" content="Check strings against pre-built DFA patterns. Test regular languages like strings ending with 01, even zeros, and more.">
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/module1_dfa/dfa.css">
+    <link rel="icon" href="../../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge {
+            font-family: var(--font-mono); font-size: 0.72rem; font-weight: 500;
+            color: var(--accent); background: var(--accent-dim);
+            border: 1px solid rgba(210,255,0,0.25);
+            padding: 3px 10px; border-radius: 99px; margin-left: 10px;
+            vertical-align: middle; letter-spacing: 0;
+        }
+        .recap-link {
+            display: inline-flex; align-items: center; gap: 6px; margin-top: 10px;
+            font-size: 0.82rem; font-weight: 600; color: var(--accent);
+            opacity: 0.85; transition: opacity 0.2s;
+        }
+        .recap-link:hover { opacity: 1; text-decoration: underline; }
+
+        /* Hero badge on left card */
+        .lc-hero {
+            display: flex; align-items: center; gap: 10px;
+            background: rgba(210,255,0,0.06); border: 1px solid rgba(210,255,0,0.15);
+            border-radius: 10px; padding: 10px 14px; margin-bottom: 20px;
+        }
+        .lc-hero-icon { font-size: 1.3rem; }
+        .lc-hero-text { font-size: 0.82rem; color: var(--muted); line-height: 1.5; }
+        .lc-hero-text strong { color: var(--accent); }
+    </style>
+</head>
+<body class="app-mode">
+
+    <div class="page-shell">
+
+        <!-- SIDEBAR -->
+        <aside class="sidebar" id="sidebar">
+            <div class="sidebar-inner">
+                <div class="sidebar-header">
+                    <span class="sidebar-title">Modules</span>
+                    <button class="sidebar-close-btn" id="sidebarClose" aria-label="Close sidebar">✕</button>
+                </div>
+                <div class="sidebar-section">
+                    <p class="sidebar-group-label">MODULES</p>
+                    <button class="sidebar-item active" onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                    <button class="sidebar-item" onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                    <button class="sidebar-item" onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                    <button class="sidebar-item" onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                    <button class="sidebar-item" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                    <button class="sidebar-item" onclick="location.href='../module6_decidability/decidability.html'">6. Decidability &amp; Complexity</button>
+                </div>
+                <div class="sidebar-section">
+                    <p class="sidebar-group-label">RESOURCES</p>
+                    <button class="sidebar-item" onclick="location.href='../module6_decidability/recap.html'">📖 Theory Recap</button>
+                </div>
+            </div>
+        </aside>
+
+        <!-- MAIN -->
+        <div class="main-area">
+
+            <nav class="navbar" id="navbar">
+                <div class="nav-brand">
+                    <img src="../../images/toc_logo.png" alt="Automata Studio Logo" class="nav-logo">
+                    <span>Automata Studio</span>
+                </div>
+                <div class="nav-links">
+                    <a href="../../index.html" class="nav-link">Product</a>
+                    <a href="dfa.html" class="nav-link active">Simulators</a>
+                    <a href="../../index.html#features" class="nav-link">Features</a>
+                    <a href="../../index.html" class="nav-cta">Return Home</a>
+                </div>
+            </nav>
+
+            <div class="page-header">
+                <div class="page-header-left">
+                    <h1 class="page-title">Language Checker <span class="tuple-badge">🎯 Module 1</span></h1>
+                </div>
+                <div class="page-header-right">
+                    <p class="page-desc">Select a pre-built regular language, enter a string, and instantly see Accept / Reject — with a full execution trace and live DFA state diagram.</p>
+                    <a href='../module6_decidability/recap.html#dfa' class="recap-link">📖 DFA Theory &amp; Recap →</a>
+                </div>
+            </div>
+            <div class="page-divider"></div>
+
+            <!-- MODULE TAB BAR -->
+            <div class="module-tab-bar">
+                <a href="dfa.html" class="module-tab">
+                    <span class="tab-icon">🔄</span>
+                    DFA Simulator
+                </a>
+                <a href="language_checker.html" class="module-tab active">
+                    <span class="tab-icon">🎯</span>
+                    Language Checker
+                </a>
+            </div>
+
+            <div class="content-columns">
+
+                <!-- LEFT: Language selector + test input -->
+                <div class="sim-card">
+                    <h2 class="card-title">Choose a Language</h2>
+
+                    <div class="lc-hero">
+                        <span class="lc-hero-icon">💡</span>
+                        <div class="lc-hero-text">
+                            Pick any <strong>regular language</strong> below, type a string, and hit <strong>Check</strong> to trace the DFA execution.
+                        </div>
+                    </div>
+
+                    <!-- Language cards populated by JS -->
+                    <div class="lang-cards-grid" id="langCardsGrid"></div>
+
+                    <div class="form-group">
+                        <label class="form-label" for="lcInput">w &mdash; Test String <span class="hint">(leave blank to test ε)</span></label>
+                        <input id="lcInput" class="mono-input" placeholder="e.g. 1001 or 001 or ab…" autocomplete="off">
+                    </div>
+
+                    <button class="btn-check" id="checkBtn" onclick="checkString()">
+                        <svg width="15" height="15" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="2.5">
+                            <polyline points="20 6 9 17 4 12"></polyline>
+                        </svg>
+                        Check String
+                    </button>
+                </div>
+
+                <!-- RIGHT: Language info + result + graph -->
+                <div class="sim-card result-card">
+                    <h2 class="card-title">Language Overview &amp; Result</h2>
+
+                    <!-- Populated by JS on language select -->
+                    <div class="lc-info-section" id="lcInfoSection"></div>
+
+                    <!-- Result + trace (revealed after Check) -->
+                    <div id="lcResultContainer" class="result-container">
+                        <div id="lcResult" class="result-box"></div>
+                        <div id="lcTraceContainer" class="trace-container"></div>
+                    </div>
+
+                    <!-- Graph placeholder -->
+                    <div id="graphPlaceholder" class="graph-placeholder">
+                        <svg width="40" height="40" viewBox="0 0 24 24" fill="none" stroke="currentColor" stroke-width="1.5" opacity="0.35">
+                            <circle cx="12" cy="12" r="10"/>
+                            <polyline points="12 6 12 12 16 14"/>
+                        </svg>
+                        <p>Select a language above to display its state diagram.</p>
+                    </div>
+
+                    <div class="dfa-graph-wrap" id="dfaGraphWrap">
+                        <p class="graph-section-label">State Diagram</p>
+                        <canvas id="dfaCanvas" class="dfa-canvas"></canvas>
+                    </div>
+
+                    <!-- Hidden form inputs read by dfa_graph.js -->
+                    <textarea id="dfaTransitions" style="display:none"></textarea>
+                    <input id="dfaStart"  style="display:none">
+                    <input id="dfaAccept" style="display:none">
+                </div>
+
+            </div>
+        </div>
+    </div>
+
+    <button id="sidebarToggle" class="sidebar-toggle-btn" aria-label="Toggle Sidebar">☰ Modules</button>
+
+    <script src="../../js/bg.js"></script>
+    <script src="../../js/common.js"></script>
+    <script src="../../js/module1_dfa/dfa_graph.js"></script>
+    <script src="../../js/module1_dfa/language_checker.js"></script>
+    <script>
+        initBgSlideshow([
+            '../../images/dfa_bg.jpg',
+            '../../images/rg_bg.jpg',
+            '../../images/cfg_bg.jpg',
+            '../../images/pda_bg.jpg',
+            '../../images/tm_bg.jpg',
+            '../../images/decid_bg.jpg'
+        ], 7000);
+
+        window.addEventListener('scroll', () => {
+            const nb = document.getElementById('navbar');
+            if (nb) nb.classList.toggle('scrolled', window.scrollY > 50);
+        });
+    </script>
+</body>
+</html>

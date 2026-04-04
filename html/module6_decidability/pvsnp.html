@@ -1,0 +1,178 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8"><meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>P vs NP — Automata Studio</title>
+    <meta name="description" content="Explore the P vs NP problem and the Halting Problem with interactive explanation cards.">
+    <link rel="preconnect" href="https://fonts.googleapis.com"><link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="../../css/module6_decidability/decidability.css"><link rel="icon" href="../../images/toc_logo.png" type="image/png">
+    <style>
+        .tuple-badge{font-family:var(--font-mono);font-size:.72rem;font-weight:500;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(210,255,0,.25);padding:3px 10px;border-radius:99px;margin-left:10px;vertical-align:middle}
+        .recap-link{display:inline-flex;align-items:center;gap:6px;margin-top:10px;font-size:.82rem;font-weight:600;color:var(--accent);opacity:.85;transition:opacity .2s}
+        .recap-link:hover{opacity:1;text-decoration:underline}
+        /* Flip cards */
+        .flip-grid{display:grid;grid-template-columns:1fr 1fr;gap:12px;margin-bottom:20px}
+        @media(max-width:700px){.flip-grid{grid-template-columns:1fr}}
+        .flip-card{perspective:800px;height:160px;cursor:pointer}
+        .flip-inner{position:relative;width:100%;height:100%;transition:transform .6s cubic-bezier(.4,.2,.2,1);transform-style:preserve-3d}
+        .flip-card:hover .flip-inner,.flip-card.flipped .flip-inner{transform:rotateY(180deg)}
+        .flip-front,.flip-back{position:absolute;inset:0;border-radius:var(--radius);padding:18px;backface-visibility:hidden;-webkit-backface-visibility:hidden;display:flex;flex-direction:column;justify-content:center}
+        .flip-front{background:rgba(255,255,255,.04);border:1px solid var(--border)}
+        .flip-back{background:rgba(0,0,0,.55);backdrop-filter:blur(16px);border:1px solid rgba(255,255,255,.12);transform:rotateY(180deg)}
+        .flip-front-title{font-size:1.05rem;font-weight:800;color:var(--text);margin-bottom:6px}
+        .flip-front-sub{font-size:.78rem;color:var(--muted)}
+        .flip-front-badge{font-family:var(--font-mono);font-size:.68rem;color:var(--accent);background:var(--accent-dim);border:1px solid rgba(210,255,0,.2);padding:2px 8px;border-radius:99px;width:fit-content;margin-bottom:10px}
+        .flip-back-text{font-size:.78rem;color:rgba(255,255,255,.75);line-height:1.65}
+        /* Halting demo */
+        .halt-step{display:flex;gap:12px;align-items:flex-start;padding:12px 14px;background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;margin-bottom:8px;transition:border-color .3s,background .3s}
+        .halt-step.revealed{border-color:rgba(244,63,94,.3);background:rgba(244,63,94,.05)}
+        .halt-num{background:rgba(244,63,94,.15);border:1px solid rgba(244,63,94,.3);color:#f43f5e;font-weight:800;font-size:.7rem;padding:2px 8px;border-radius:99px;flex-shrink:0;margin-top:2px}
+        .halt-text{font-size:.82rem;color:var(--muted);line-height:1.65;display:none}
+        .halt-step.revealed .halt-text{display:block;color:rgba(255,255,255,.7)}
+        .halt-title{font-size:.88rem;font-weight:700;color:var(--text);margin-bottom:4px}
+        .demo-btn{background:var(--accent);color:#000;border:none;border-radius:99px;padding:10px 22px;font-family:var(--font-ui);font-weight:700;font-size:.85rem;cursor:pointer;transition:all var(--transition);display:flex;align-items:center;gap:8px}
+        .demo-btn:hover{background:#deff33;transform:translateY(-1px)}
+    </style>
+</head>
+<body class="app-mode">
+<div class="page-shell">
+    <aside class="sidebar" id="sidebar">
+        <div class="sidebar-inner">
+            <div class="sidebar-header"><span class="sidebar-title">Modules</span><button class="sidebar-close-btn" id="sidebarClose">✕</button></div>
+            <div class="sidebar-section">
+                <p class="sidebar-group-label">MODULES</p>
+                <button class="sidebar-item" onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
+                <button class="sidebar-item" onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
+                <button class="sidebar-item" onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
+                <button class="sidebar-item" onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
+                <button class="sidebar-item active" onclick="location.href='decidability.html'">6. Decidability &amp; Complexity</button>
+            </div>
+            <div class="sidebar-section"><p class="sidebar-group-label">RESOURCES</p><button class="sidebar-item" onclick="location.href='recap.html'">📖 Theory Recap</button></div>
+        </div>
+    </aside>
+    <div class="main-area">
+        <nav class="navbar" id="navbar">
+            <div class="nav-brand"><img src="../../images/toc_logo.png" alt="Logo" class="nav-logo"><span>Automata Studio</span></div>
+            <div class="nav-links"><a href="../../index.html" class="nav-link">Product</a><a href="decidability.html" class="nav-link active">Simulators</a><a href="../../index.html#features" class="nav-link">Features</a><a href="../../index.html" class="nav-cta">Return Home</a></div>
+        </nav>
+        <div class="page-header">
+            <div class="page-header-left"><h1 class="page-title">P vs NP &amp; Halting <span class="tuple-badge">🧠 Module 6</span></h1></div>
+            <div class="page-header-right">
+                <p class="page-desc">Explore the most famous open problem in computer science — <strong>P vs NP</strong> — and the proven undecidable <strong>Halting Problem</strong>. Hover/click cards to reveal key insights.</p>
+                <a href='recap.html#decidability' class="recap-link">📖 Theory →</a>
+            </div>
+        </div>
+        <div class="page-divider"></div>
+        <div class="module-tab-bar">
+            <a href="decidability.html" class="module-tab"><span class="tab-icon">❌</span> Halting Problem</a>
+            <a href="complexity.html" class="module-tab"><span class="tab-icon">⏱️</span> Complexity</a>
+            <a href="pvsnp.html" class="module-tab active"><span class="tab-icon">🧠</span> P vs NP</a>
+        </div>
+
+        <!-- P vs NP flip cards — full width -->
+        <div class="sim-card" style="margin-bottom:20px">
+            <h2 class="card-title">P vs NP — Interactive Cards <span style="font-size:.75rem;color:var(--muted);font-weight:400">(hover to flip)</span></h2>
+            <div class="flip-grid">
+                <div class="flip-card"><div class="flip-inner">
+                    <div class="flip-front">
+                        <div class="flip-front-badge">CLASS P</div>
+                        <div class="flip-front-title">Polynomial Time</div>
+                        <div class="flip-front-sub">Problems solvable efficiently by a deterministic TM</div>
+                    </div>
+                    <div class="flip-back"><div class="flip-back-text"><strong style="color:var(--accent)">P = {L | L is decidable in O(nᵏ) time}</strong><br><br>Examples: sorting, shortest path (Dijkstra), matrix multiplication, primality testing (AKS). These are "easy" problems — we can find solutions quickly.</div></div>
+                </div></div>
+                <div class="flip-card"><div class="flip-inner">
+                    <div class="flip-front" style="border-color:rgba(167,139,250,.2)">
+                        <div class="flip-front-badge" style="color:#a78bfa;background:rgba(167,139,250,.12);border-color:rgba(167,139,250,.2)">CLASS NP</div>
+                        <div class="flip-front-title">Nondeterministic Polynomial</div>
+                        <div class="flip-front-sub">Solutions are verifiable in polynomial time</div>
+                    </div>
+                    <div class="flip-back"><div class="flip-back-text"><strong style="color:#a78bfa">NP = {L | L is decidable by a nondeterministic TM in O(nᵏ)}</strong><br><br>Examples: SAT (boolean satisfiability), Hamiltonian path, graph coloring, subset sum. We can CHECK a solution quickly, but finding one may be hard.</div></div>
+                </div></div>
+                <div class="flip-card"><div class="flip-inner">
+                    <div class="flip-front" style="border-color:rgba(249,115,22,.2)">
+                        <div class="flip-front-badge" style="color:#f97316;background:rgba(249,115,22,.1);border-color:rgba(249,115,22,.2)">NP-COMPLETE</div>
+                        <div class="flip-front-title">Hardest Problems in NP</div>
+                        <div class="flip-front-sub">Every NP problem reduces to these in poly time</div>
+                    </div>
+                    <div class="flip-back"><div class="flip-back-text"><strong style="color:#f97316">NP-Complete = NP ∩ NP-Hard</strong><br><br>If ANY NP-complete problem is in P, then P = NP. First proved: SAT (Cook-Levin, 1971). Others: 3-SAT, vertex cover, TSP-decision, clique problem.</div></div>
+                </div></div>
+                <div class="flip-card"><div class="flip-inner">
+                    <div class="flip-front" style="border-color:rgba(244,63,94,.2)">
+                        <div class="flip-front-badge" style="color:#f43f5e;background:rgba(244,63,94,.1);border-color:rgba(244,63,94,.2)">THE BIG QUESTION</div>
+                        <div class="flip-front-title">Does P = NP?</div>
+                        <div class="flip-front-sub">$1M Millennium Prize Problem — unsolved since 1971</div>
+                    </div>
+                    <div class="flip-back"><div class="flip-back-text"><strong style="color:#f43f5e">Most experts believe P ≠ NP</strong><br><br>If P = NP: cryptography breaks, AI could solve complex problems instantly, proofs could be found automatically.<br>If P ≠ NP: hard problems stay hard. We don't know which. No proof exists either way.</div></div>
+                </div></div>
+            </div>
+            <div style="display:flex;gap:10px;flex-wrap:wrap;align-items:center">
+                <div style="font-family:var(--font-mono);font-size:.82rem;color:rgba(255,255,255,.6);background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:10px 16px">
+                    P ⊆ NP &nbsp;|&nbsp; P ⊆ co-NP &nbsp;|&nbsp; P = NP ? &nbsp;|&nbsp; NP ∩ co-NP = ?
+                </div>
+            </div>
+        </div>
+
+        <div class="content-columns">
+            <!-- LEFT: Halting demo -->
+            <div class="sim-card">
+                <h2 class="card-title">❌ Halting Problem Demo</h2>
+                <p style="font-size:.83rem;color:var(--muted);margin-bottom:16px;line-height:1.65">Walk through Turing's diagonalization proof step by step. Click <strong>Reveal Next Step</strong> to animate the contradiction.</p>
+                <button class="demo-btn" id="haltNextBtn" onclick="revealNext()">
+                    <svg width="13" height="13" viewBox="0 0 24 24" fill="currentColor"><polygon points="5 3 19 12 5 21 5 3"></polygon></svg>
+                    Reveal Next Step
+                </button>
+                <div style="margin-top:16px" id="haltSteps">
+                    <div class="halt-step" id="hs0"><span class="halt-num">1</span><div><div class="halt-title">Assume H exists</div><div class="halt-text">Suppose a TM <strong>H</strong> exists that decides HALT<sub>TM</sub>: for any TM M and input w, H accepts if M halts on w, and rejects if M loops forever.</div></div></div>
+                    <div class="halt-step" id="hs1"><span class="halt-num">2</span><div><div class="halt-title">Construct D from H</div><div class="halt-text">Build a new TM <strong>D</strong> that takes a TM description ⟨M⟩ as input, runs H on ⟨M, ⟨M⟩⟩ (M on its own description), then does the OPPOSITE: if H says M halts → D loops; if H says M loops → D halts.</div></div></div>
+                    <div class="halt-step" id="hs2"><span class="halt-num">3</span><div><div class="halt-title">Run D on itself: D(⟨D⟩)</div><div class="halt-text">What happens when we give D its own description? D runs H on ⟨D, ⟨D⟩⟩. Case 1: H says D halts → D loops. But H said D halts. <strong>Contradiction!</strong></div></div></div>
+                    <div class="halt-step" id="hs3"><span class="halt-num">4</span><div><div class="halt-title">The Other Case</div><div class="halt-text">Case 2: H says D loops → D halts. But H said D loops. <strong>Contradiction again!</strong> Both cases lead to contradiction.</div></div></div>
+                    <div class="halt-step" id="hs4"><span class="halt-num">5</span><div><div class="halt-title">Conclusion ∎</div><div class="halt-text">Since both cases are impossible, our assumption that H exists must be false.<br><strong style="color:#f43f5e">∴ HALT<sub>TM</sub> is undecidable. No algorithm can solve the Halting Problem for all inputs.</strong></div></div></div>
+                </div>
+            </div>
+            <!-- RIGHT: NP examples -->
+            <div class="sim-card">
+                <h2 class="card-title">NP Problems Gallery</h2>
+                <div style="display:flex;flex-direction:column;gap:10px">
+                    <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
+                        <div style="font-weight:700;color:var(--accent);margin-bottom:6px">SAT (Boolean Satisfiability)</div>
+                        <div style="font-size:.8rem;color:var(--muted);line-height:1.6">Given a boolean formula (x₁ ∨ ¬x₂) ∧ (x₂ ∨ x₃), is there an assignment making it TRUE?<br><span style="color:rgba(255,255,255,.5)">NP-complete — Cook-Levin theorem (1971)</span></div>
+                    </div>
+                    <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
+                        <div style="font-weight:700;color:#a78bfa;margin-bottom:6px">Hamiltonian Path</div>
+                        <div style="font-size:.8rem;color:var(--muted);line-height:1.6">Does a graph have a path visiting every vertex exactly once? Checking YES: easy. Finding one: exponential in worst case.<br><span style="color:rgba(255,255,255,.5)">NP-complete</span></div>
+                    </div>
+                    <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
+                        <div style="font-weight:700;color:#f97316;margin-bottom:6px">TSP Decision (Travelling Salesman)</div>
+                        <div style="font-size:.8rem;color:var(--muted);line-height:1.6">Is there a tour of all cities with total distance ≤ k? Brute force: O(n!) paths.<br><span style="color:rgba(255,255,255,.5)">NP-complete</span></div>
+                    </div>
+                    <div style="background:rgba(0,0,0,.3);border:1px solid var(--border);border-radius:8px;padding:14px 16px">
+                        <div style="font-weight:700;color:#38bdf8;margin-bottom:6px">Subset Sum</div>
+                        <div style="font-size:.8rem;color:var(--muted);line-height:1.6">Given a set of integers, does any subset sum to exactly target T? Used in cryptography.<br><span style="color:rgba(255,255,255,.5)">NP-complete (weakly)</span></div>
+                    </div>
+                    <div style="background:rgba(255,255,255,.04);border:1px solid rgba(210,255,0,.15);border-radius:8px;padding:14px 16px">
+                        <div style="font-weight:700;color:var(--accent);margin-bottom:4px">If P = NP…</div>
+                        <div style="font-size:.78rem;color:var(--muted);line-height:1.65">All these problems become polynomial. RSA encryption breaks. Proteins fold in seconds. AI finds optimal solutions. <em>The world changes entirely.</em></div>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </div>
+</div>
+<button id="sidebarToggle" class="sidebar-toggle-btn">☰ Modules</button>
+<script src="../../js/bg.js"></script><script src="../../js/common.js"></script>
+<script>
+    let haltIdx=0;
+    function revealNext(){
+        const step=document.getElementById('hs'+haltIdx);
+        if(step){step.classList.add('revealed');haltIdx++;}
+        if(haltIdx>=5){document.getElementById('haltNextBtn').disabled=true;document.getElementById('haltNextBtn').style.opacity='.4';}
+    }
+    // Flip card click toggle on mobile
+    document.querySelectorAll('.flip-card').forEach(c=>c.addEventListener('click',()=>c.classList.toggle('flipped')));
+    initBgSlideshow(['../../images/decid_bg.jpg','../../images/dfa_bg.jpg','../../images/rg_bg.jpg','../../images/cfg_bg.jpg','../../images/pda_bg.jpg','../../images/tm_bg.jpg'],7000);
+    window.addEventListener('scroll',()=>{const nb=document.getElementById('navbar');if(nb)nb.classList.toggle('scrolled',window.scrollY>50);});
+</script>
+</body></html>
