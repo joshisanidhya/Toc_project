@@ -85,73 +85,7 @@ The simulator covers all **6 units** of the TOC course:
 
 ---
 
-## 🗂️ Project Structure
 
-```
-Toc_project/
-│
-├── index.html                          # Landing page
-│
-├── html/
-│   ├── module1_dfa/
-│   │   ├── dfa.html                    # DFA Simulator
-│   │   ├── nfa_to_dfa.html             # NFA → DFA Converter
-│   │   └── language_checker.html       # Language Checker
-│   ├── module2_regex/
-│   │   ├── regex.html                  # Regex Checker
-│   │   └── re_to_nfa.html              # RE → NFA Converter
-│   ├── module3_cfg/
-│   │   ├── cfg.html                    # CFG Derivation
-│   │   ├── cfg_to_cnf.html             # CFG → CNF Converter
-│   │   ├── parse_tree.html             # Parse Tree Visualizer
-│   │   └── cfg_pda.html                # CFG ↔ PDA Equivalence
-│   ├── module4_pda/
-│   │   └── pda.html                    # PDA Simulator
-│   ├── module5_tm/
-│   │   ├── tm.html                     # Turing Machine Simulator
-│   │   └── tm_tape.html                # Tape Animation
-│   └── module6_decidability/
-│       ├── decidability.html           # Halting Problem Demo
-│       ├── complexity.html             # Complexity Visualizer
-│       ├── pvsnp.html                  # P vs NP Explorer
-│       └── recap.html                  # Theory Recap (all modules)
-│
-├── css/
-│   ├── module1_dfa/dfa.css             # ★ Shared simulator stylesheet
-│   ├── module2_regex/regex.css
-│   ├── module3_cfg/cfg.css
-│   ├── module4_pda/pda.css
-│   ├── module5_tm/tm.css
-│   ├── module6_decidability/
-│   ├── landing.css                     # Landing page styles
-│   ├── common.css                      # Shared base styles
-│   └── styles.css
-│
-├── js/
-│   ├── module1_dfa/
-│   │   ├── dfa.js                      # DFA simulation logic
-│   │   ├── dfa_graph.js                # Canvas state-graph renderer
-│   │   ├── nfa_to_dfa.js               # Subset construction algorithm
-│   │   └── language_checker.js         # Pre-built DFA patterns
-│   ├── module2_regex/
-│   │   ├── regex.js                    # Regex matching engine
-│   │   └── re_to_nfa.js                # Thompson's construction
-│   ├── module3_cfg/
-│   │   ├── cfg.js                      # CFG derivation checker
-│   │   ├── cfg_to_cnf.js               # CNF converter (5-step Sipser)
-│   │   └── parse_tree.js               # Parse tree builder
-│   ├── module4_pda/
-│   │   └── pda.js                      # PDA stack simulation
-│   ├── module5_tm/
-│   │   └── tm.js                       # Turing Machine engine
-│   ├── module6_decidability/
-│   │   └── decidability.js             # Halting problem demo
-│   ├── bg.js                           # Dynamic background slideshow (Ken Burns)
-│   ├── common.js                       # Sidebar toggle, shared utilities
-│   └── landing.js                      # Landing page interactions
-│
-└── images/                             # Background images, logos
-```
 
 ---
 
@@ -191,19 +125,6 @@ cd Toc_project
 npx serve .
 # Open http://localhost:3000
 ```
-
----
-
-## ✨ Design Highlights
-
-- **Dark glassmorphic UI** — frosted-glass cards with backdrop blur
-- **Dynamic Ken Burns background** — crossfading background images with slow zoom/pan animation
-- **Collapsible sidebar** — toggleable module navigation panel
-- **Pill-shaped navbar** — transforms into a floating pill on scroll
-- **Module tab bar** — within-module sub-page navigation
-- **Lime yellow accent** (`#D2FF00`) — neon highlight on active states, buttons, and inputs
-- **Execution trace visualization** — animated step-by-step chips for DFA/PDA/TM
-
 ---
 
 ## 📬 Contact
