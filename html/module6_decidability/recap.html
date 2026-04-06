@@ -1,13 +1,17 @@
 <!DOCTYPE html>
 <html lang="en">
+
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Theory Recap — Automata Studio</title>
-    <meta name="description" content="Comprehensive theory recap for all TOC modules: DFA, Regex, CFG, PDA, Turing Machine, and Decidability.">
+    <meta name="description"
+        content="Comprehensive theory recap for all TOC modules: DFA, Regex, CFG, PDA, Turing Machine, and Decidability.">
     <link rel="preconnect" href="https://fonts.googleapis.com">
     <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
-    <link href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap" rel="stylesheet">
+    <link
+        href="https://fonts.googleapis.com/css2?family=Inter:wght@300;400;500;600;700;800&family=JetBrains+Mono:wght@400;500;700&family=Space+Grotesk:wght@400;500;600;700&display=swap"
+        rel="stylesheet">
     <link rel="stylesheet" href="../../css/module1_dfa/dfa.css">
     <link rel="icon" href="../../images/toc_logo.png" type="image/png">
     <style>
@@ -20,9 +24,9 @@
         }
 
         .recap-tab {
-            background: rgba(255,255,255,0.05);
-            border: 1px solid rgba(255,255,255,0.10);
-            color: rgba(255,255,255,0.55);
+            background: rgba(255, 255, 255, 0.05);
+            border: 1px solid rgba(255, 255, 255, 0.10);
+            color: rgba(255, 255, 255, 0.55);
             font-family: var(--font-ui);
             font-size: 0.85rem;
             font-weight: 600;
@@ -35,7 +39,7 @@
 
         .recap-tab:hover {
             color: #fff;
-            background: rgba(255,255,255,0.08);
+            background: rgba(255, 255, 255, 0.08);
         }
 
         .recap-tab.active {
@@ -50,17 +54,26 @@
             animation: fadeSlide 0.35s ease forwards;
         }
 
-        .recap-section.visible { display: block; }
+        .recap-section.visible {
+            display: block;
+        }
 
         @keyframes fadeSlide {
-            from { opacity: 0; transform: translateY(12px); }
-            to   { opacity: 1; transform: translateY(0); }
+            from {
+                opacity: 0;
+                transform: translateY(12px);
+            }
+
+            to {
+                opacity: 1;
+                transform: translateY(0);
+            }
         }
 
         /* Info cards inside recap */
         .info-card {
-            background: rgba(8,8,12,0.50);
-            border: 1px solid rgba(255,255,255,0.09);
+            background: rgba(8, 8, 12, 0.50);
+            border: 1px solid rgba(255, 255, 255, 0.09);
             border-radius: 16px;
             padding: 28px 32px;
             margin-bottom: 20px;
@@ -83,35 +96,39 @@
             font-size: 0.7rem;
             font-weight: 500;
             background: var(--accent-dim);
-            border: 1px solid rgba(210,255,0,0.25);
+            border: 1px solid rgba(210, 255, 0, 0.25);
             color: var(--accent);
             padding: 2px 10px;
             border-radius: 99px;
         }
 
-        .info-card p, .info-card li {
+        .info-card p,
+        .info-card li {
             font-size: 0.9rem;
-            color: rgba(255,255,255,0.68);
+            color: rgba(255, 255, 255, 0.68);
             line-height: 1.8;
         }
 
-        .info-card ul, .info-card ol {
+        .info-card ul,
+        .info-card ol {
             padding-left: 20px;
             margin-top: 8px;
         }
 
-        .info-card li { margin-bottom: 6px; }
+        .info-card li {
+            margin-bottom: 6px;
+        }
 
         /* Formal definition block */
         .def-block {
-            background: rgba(0,0,0,0.35);
+            background: rgba(0, 0, 0, 0.35);
             border-left: 3px solid var(--accent);
             border-radius: 0 10px 10px 0;
             padding: 16px 20px;
             margin: 14px 0;
             font-family: var(--font-mono);
             font-size: 0.84rem;
-            color: rgba(255,255,255,0.80);
+            color: rgba(255, 255, 255, 0.80);
             line-height: 1.9;
         }
 
@@ -128,8 +145,8 @@
 
         /* Example block */
         .example-block {
-            background: rgba(0,0,0,0.28);
-            border: 1px solid rgba(255,255,255,0.07);
+            background: rgba(0, 0, 0, 0.28);
+            border: 1px solid rgba(255, 255, 255, 0.07);
             border-radius: 10px;
             padding: 16px 20px;
             margin: 12px 0;
@@ -140,7 +157,7 @@
             font-weight: 700;
             text-transform: uppercase;
             letter-spacing: 1.5px;
-            color: rgba(255,255,255,0.40);
+            color: rgba(255, 255, 255, 0.40);
             margin-bottom: 10px;
             display: block;
         }
@@ -148,7 +165,7 @@
         .example-block code {
             font-family: var(--font-mono);
             font-size: 0.85rem;
-            color: rgba(255,255,255,0.85);
+            color: rgba(255, 255, 255, 0.85);
             line-height: 1.8;
             white-space: pre-wrap;
             display: block;
@@ -163,7 +180,9 @@
         }
 
         @media (max-width: 800px) {
-            .info-grid { grid-template-columns: 1fr; }
+            .info-grid {
+                grid-template-columns: 1fr;
+            }
         }
 
         /* Highlight text */
@@ -182,9 +201,9 @@
         }
 
         .chip {
-            background: rgba(255,255,255,0.06);
-            border: 1px solid rgba(255,255,255,0.12);
-            color: rgba(255,255,255,0.75);
+            background: rgba(255, 255, 255, 0.06);
+            border: 1px solid rgba(255, 255, 255, 0.12);
+            color: rgba(255, 255, 255, 0.75);
             font-size: 0.78rem;
             font-family: var(--font-mono);
             padding: 4px 14px;
@@ -192,14 +211,14 @@
         }
 
         .chip.yes {
-            background: rgba(34,197,94,0.12);
-            border-color: rgba(34,197,94,0.35);
+            background: rgba(34, 197, 94, 0.12);
+            border-color: rgba(34, 197, 94, 0.35);
             color: #4ade80;
         }
 
         .chip.no {
-            background: rgba(244,63,94,0.10);
-            border-color: rgba(244,63,94,0.30);
+            background: rgba(244, 63, 94, 0.10);
+            border-color: rgba(244, 63, 94, 0.30);
             color: #fda4af;
         }
 
@@ -213,22 +232,24 @@
         }
 
         .trans-table th {
-            background: rgba(210,255,0,0.08);
+            background: rgba(210, 255, 0, 0.08);
             color: var(--accent);
             padding: 8px 14px;
             text-align: center;
             font-weight: 700;
-            border: 1px solid rgba(255,255,255,0.08);
+            border: 1px solid rgba(255, 255, 255, 0.08);
         }
 
         .trans-table td {
             padding: 8px 14px;
             text-align: center;
-            color: rgba(255,255,255,0.75);
-            border: 1px solid rgba(255,255,255,0.06);
+            color: rgba(255, 255, 255, 0.75);
+            border: 1px solid rgba(255, 255, 255, 0.06);
         }
 
-        .trans-table tr:hover td { background: rgba(255,255,255,0.03); }
+        .trans-table tr:hover td {
+            background: rgba(255, 255, 255, 0.03);
+        }
 
         .page-title-row {
             display: flex;
@@ -239,14 +260,17 @@
 
         .page-title-row a {
             font-size: 0.82rem;
-            color: rgba(255,255,255,0.4);
+            color: rgba(255, 255, 255, 0.4);
             font-weight: 500;
             transition: color 0.2s;
         }
 
-        .page-title-row a:hover { color: var(--accent); }
+        .page-title-row a:hover {
+            color: var(--accent);
+        }
     </style>
 </head>
+
 <body class="app-mode">
 
     <div class="page-shell">
@@ -258,14 +282,20 @@
                     <span class="sidebar-title">Modules</span>
                     <button class="sidebar-close-btn" id="sidebarClose" aria-label="Close sidebar">✕</button>
                 </div>
-                                <div class="sidebar-section">
+                <div class="sidebar-section">
                     <p class="sidebar-group-label">MODULES</p>
-                    <button class="sidebar-item " onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of Automata</button>
-                    <button class="sidebar-item " onclick="location.href='../module2_regex/regex.html'">2. Regular Languages &amp; Expressions</button>
-                    <button class="sidebar-item " onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free Grammars</button>
-                    <button class="sidebar-item " onclick="location.href='../module4_pda/pda.html'">4. Pushdown Automata</button>
-                    <button class="sidebar-item " onclick="location.href='../module5_tm/tm.html'">5. Turing Machines</button>
-                    <button class="sidebar-item " onclick="location.href='decidability.html'">6. Decidability &amp; Complexity</button>
+                    <button class="sidebar-item " onclick="location.href='../module1_dfa/dfa.html'">1. Foundations of
+                        Automata</button>
+                    <button class="sidebar-item " onclick="location.href='../module2_regex/regex.html'">2. Regular
+                        Languages &amp; Expressions</button>
+                    <button class="sidebar-item " onclick="location.href='../module3_cfg/cfg.html'">3. Context-Free
+                        Grammars</button>
+                    <button class="sidebar-item " onclick="location.href='../module4_pda/pda.html'">4. Pushdown
+                        Automata</button>
+                    <button class="sidebar-item " onclick="location.href='../module5_tm/tm.html'">5. Turing
+                        Machines</button>
+                    <button class="sidebar-item " onclick="location.href='decidability.html'">6. Decidability &amp;
+                        Complexity</button>
                 </div>
                 <div class="sidebar-section">
                     <p class="sidebar-group-label">RESOURCES</p>
@@ -295,7 +325,8 @@
                     <h1 class="page-title">Theory Recap</h1>
                 </div>
                 <div class="page-header-right">
-                    <p class="page-desc">Complete definitions, formal notation, closure properties, and worked examples for every TOC module — DFA, Regex, CFG, PDA, Turing Machine, and Decidability.</p>
+                    <p class="page-desc">Complete definitions, formal notation, closure properties, and worked examples
+                        for every TOC module — DFA, Regex, CFG, PDA, Turing Machine, and Decidability.</p>
                 </div>
             </div>
             <div class="page-divider"></div>
@@ -317,7 +348,10 @@
 
                 <div class="info-card">
                     <h3>What is a DFA? <span class="tag">Unit 1</span></h3>
-                    <p>A <em class="hl">Deterministic Finite Automaton (DFA)</em> is the simplest machine model in the Chomsky hierarchy. It reads an input string symbol by symbol and decides whether to <strong>accept</strong> or <strong>reject</strong> it by following exactly one transition from every state for every symbol.</p>
+                    <p>A <em class="hl">Deterministic Finite Automaton (DFA)</em> is the simplest machine model in the
+                        Chomsky hierarchy. It reads an input string symbol by symbol and decides whether to
+                        <strong>accept</strong> or <strong>reject</strong> it by following exactly one transition from
+                        every state for every symbol.</p>
                 </div>
 
                 <div class="info-grid">
@@ -325,11 +359,11 @@
                         <h3>Formal Definition — 5-Tuple</h3>
                         <div class="def-block">
                             <span class="def-label">M = (Q, Σ, δ, q₀, F)</span>
-                            Q  — finite set of states<br>
-                            Σ  — finite input alphabet<br>
-                            δ  — transition function: Q × Σ → Q<br>
-                            q₀ — start state  (q₀ ∈ Q)<br>
-                            F  — set of accept states  (F ⊆ Q)
+                            Q — finite set of states<br>
+                            Σ — finite input alphabet<br>
+                            δ — transition function: Q × Σ → Q<br>
+                            q₀ — start state (q₀ ∈ Q)<br>
+                            F — set of accept states (F ⊆ Q)
                         </div>
                     </div>
 
@@ -342,7 +376,8 @@
                             <span class="chip no">No stack / memory</span>
                             <span class="chip no">No ε-transitions</span>
                         </div>
-                        <p style="margin-top:12px;">For every state and every symbol there is <em class="hl">exactly one</em> transition — no guessing, no backtracking.</p>
+                        <p style="margin-top:12px;">For every state and every symbol there is <em class="hl">exactly
+                                one</em> transition — no guessing, no backtracking.</p>
                     </div>
                 </div>
 
@@ -350,19 +385,35 @@
                     <h3>Worked Example — L = {w | w ends with 'ab'}</h3>
                     <div class="def-block">
                         <span class="def-label">States & Alphabet</span>
-                        Q = {q0, q1, q2}     Σ = {a, b}
-                        q₀ = q0              F = {q2}
+                        Q = {q0, q1, q2} Σ = {a, b}
+                        q₀ = q0 F = {q2}
                     </div>
                     <div class="example-block">
                         <span class="ex-title">Transition Table δ</span>
                         <table class="trans-table">
                             <thead>
-                                <tr><th>State</th><th>a</th><th>b</th></tr>
+                                <tr>
+                                    <th>State</th>
+                                    <th>a</th>
+                                    <th>b</th>
+                                </tr>
                             </thead>
                             <tbody>
-                                <tr><td>→ q0</td><td>q1</td><td>q0</td></tr>
-                                <tr><td>q1</td><td>q1</td><td>q2</td></tr>
-                                <tr><td>* q2</td><td>q1</td><td>q0</td></tr>
+                                <tr>
+                                    <td>→ q0</td>
+                                    <td>q1</td>
+                                    <td>q0</td>
+                                </tr>
+                                <tr>
+                                    <td>q1</td>
+                                    <td>q1</td>
+                                    <td>q2</td>
+                                </tr>
+                                <tr>
+                                    <td>* q2</td>
+                                    <td>q1</td>
+                                    <td>q0</td>
+                                </tr>
                             </tbody>
                         </table>
                     </div>
@@ -401,7 +452,8 @@
 
                 <div class="info-card">
                     <h3>Pumping Lemma for Regular Languages</h3>
-                    <p>If L is regular, ∃ pumping length p such that every string s ∈ L with |s| ≥ p can be split into s = xyz where:</p>
+                    <p>If L is regular, ∃ pumping length p such that every string s ∈ L with |s| ≥ p can be split into s
+                        = xyz where:</p>
                     <div class="def-block">
                         1. |y| ≥ 1
                         2. |xy| ≤ p
@@ -418,31 +470,32 @@
 
                 <div class="info-card">
                     <h3>What are Regular Expressions? <span class="tag">Unit 2</span></h3>
-                    <p>A <em class="hl">Regular Expression (RE)</em> is an algebraic notation for describing regular languages. Every RE denotes exactly the same class of languages as DFAs and NFAs.</p>
+                    <p>A <em class="hl">Regular Expression (RE)</em> is an algebraic notation for describing regular
+                        languages. Every RE denotes exactly the same class of languages as DFAs and NFAs.</p>
                 </div>
 
                 <div class="info-grid">
                     <div class="info-card">
                         <h3>Primitive Operations</h3>
                         <div class="def-block">
-                            ε        — the empty string<br>
-                            ∅        — the empty language<br>
-                            a        — literal symbol a ∈ Σ<br>
-                            R₁ | R₂  — Union (R₁ OR R₂)<br>
-                            R₁ · R₂  — Concatenation<br>
-                            R*       — Kleene star (0 or more)
+                            ε — the empty string<br>
+                            ∅ — the empty language<br>
+                            a — literal symbol a ∈ Σ<br>
+                            R₁ | R₂ — Union (R₁ OR R₂)<br>
+                            R₁ · R₂ — Concatenation<br>
+                            R* — Kleene star (0 or more)
                         </div>
                     </div>
                     <div class="info-card">
                         <h3>Shorthand / Extended Notation</h3>
                         <div class="def-block">
-                            R⁺    ≡ R·R*   (one or more)<br>
-                            R?    ≡ R|ε    (zero or one)<br>
-                            [abc] ≡ a|b|c  (character class)<br>
+                            R⁺ ≡ R·R* (one or more)<br>
+                            R? ≡ R|ε (zero or one)<br>
+                            [abc] ≡ a|b|c (character class)<br>
                             [a-z] ≡ any lowercase letter<br>
-                            .     ≡ any single character<br>
-                            ^R    ≡ anchored at start<br>
-                            R$    ≡ anchored at end
+                            . ≡ any single character<br>
+                            ^R ≡ anchored at start<br>
+                            R$ ≡ anchored at end
                         </div>
                     </div>
                 </div>
@@ -454,7 +507,9 @@
                         <span class="chip">2. Concatenation ·</span>
                         <span class="chip">3. Union |</span>
                     </div>
-                    <p style="margin-top:12px;">Use parentheses to override: <code style="font-family:var(--font-mono);font-size:0.84rem;color:var(--accent)">(a|b)*abb</code> — strings over {a,b} ending in abb.</p>
+                    <p style="margin-top:12px;">Use parentheses to override: <code
+                            style="font-family:var(--font-mono);font-size:0.84rem;color:var(--accent)">(a|b)*abb</code>
+                        — strings over {a,b} ending in abb.</p>
                 </div>
 
                 <div class="info-card">
@@ -481,7 +536,10 @@
 
                 <div class="info-card">
                     <h3>Arden's Lemma</h3>
-                    <p>Used to derive a regular expression from a system of equations. If P does not contain ε, then the equation <code style="font-family:var(--font-mono);font-size:0.85rem">X = QP* ∪ R</code> has unique solution <code style="font-family:var(--font-mono);font-size:0.85rem">X = QP* ∪ R</code>. Used in constructing RE from DFA state equations.</p>
+                    <p>Used to derive a regular expression from a system of equations. If P does not contain ε, then the
+                        equation <code style="font-family:var(--font-mono);font-size:0.85rem">X = QP* ∪ R</code> has
+                        unique solution <code style="font-family:var(--font-mono);font-size:0.85rem">X = QP* ∪ R</code>.
+                        Used in constructing RE from DFA state equations.</p>
                 </div>
             </div>
 
@@ -492,7 +550,9 @@
 
                 <div class="info-card">
                     <h3>What is a CFG? <span class="tag">Unit 3</span></h3>
-                    <p>A <em class="hl">Context-Free Grammar (CFG)</em> generates context-free languages (CFL) — a strictly larger class than regular languages. CFGs are used to describe the syntax of programming languages.</p>
+                    <p>A <em class="hl">Context-Free Grammar (CFG)</em> generates context-free languages (CFL) — a
+                        strictly larger class than regular languages. CFGs are used to describe the syntax of
+                        programming languages.</p>
                 </div>
 
                 <div class="info-grid">
@@ -500,11 +560,11 @@
                         <h3>Formal Definition — 4-Tuple</h3>
                         <div class="def-block">
                             <span class="def-label">G = (V, Σ, R, S)</span>
-                            V  — finite set of variables (non-terminals)<br>
-                            Σ  — terminal alphabet  (V ∩ Σ = ∅)<br>
-                            R  — finite set of production rules<br>
-                               — each rule: A → α,  A ∈ V, α ∈ (V∪Σ)*<br>
-                            S  — start variable  (S ∈ V)
+                            V — finite set of variables (non-terminals)<br>
+                            Σ — terminal alphabet (V ∩ Σ = ∅)<br>
+                            R — finite set of production rules<br>
+                            — each rule: A → α, A ∈ V, α ∈ (V∪Σ)*<br>
+                            S — start variable (S ∈ V)
                         </div>
                     </div>
                     <div class="info-card">
@@ -538,9 +598,9 @@
                         <h3>Chomsky Normal Form (CNF)</h3>
                         <p>Every CFG can be converted to CNF where every rule is:</p>
                         <div class="def-block">
-                            A → BC    (two variables)<br>
-                            A → a     (one terminal)<br>
-                            S → ε     (only if ε ∈ L)
+                            A → BC (two variables)<br>
+                            A → a (one terminal)<br>
+                            S → ε (only if ε ∈ L)
                         </div>
                         <p>CNF is used by the <em class="hl">CYK parsing algorithm</em> (O(n³)).</p>
                     </div>
@@ -553,13 +613,16 @@
                             <span class="chip no">Intersection</span>
                             <span class="chip no">Complement</span>
                         </div>
-                        <p style="margin-top:12px;">The intersection of two CFLs is <em class="hl">not always</em> a CFL. The intersection of a CFL with a regular language IS always a CFL.</p>
+                        <p style="margin-top:12px;">The intersection of two CFLs is <em class="hl">not always</em> a
+                            CFL. The intersection of a CFL with a regular language IS always a CFL.</p>
                     </div>
                 </div>
 
                 <div class="info-card">
                     <h3>Ambiguity</h3>
-                    <p>A grammar is <em class="hl">ambiguous</em> if some string has more than one leftmost derivation tree (parse tree). Some CFLs are <em class="hl">inherently ambiguous</em> — no unambiguous grammar exists for them.</p>
+                    <p>A grammar is <em class="hl">ambiguous</em> if some string has more than one leftmost derivation
+                        tree (parse tree). Some CFLs are <em class="hl">inherently ambiguous</em> — no unambiguous
+                        grammar exists for them.</p>
                     <div class="example-block">
                         <span class="ex-title">Classic ambiguous grammar</span>
                         <code>E → E + E | E * E | (E) | id</code>
@@ -574,30 +637,36 @@
 
                 <div class="info-card">
                     <h3>What is a PDA? <span class="tag">Unit 4</span></h3>
-                    <p>A <em class="hl">Pushdown Automaton (PDA)</em> is a finite automaton augmented with an infinite stack. The stack gives it enough memory to recognize context-free languages — exactly the languages generated by CFGs.</p>
+                    <p>A <em class="hl">Pushdown Automaton (PDA)</em> is a finite automaton augmented with an infinite
+                        stack. The stack gives it enough memory to recognize context-free languages — exactly the
+                        languages generated by CFGs.</p>
                 </div>
 
                 <div class="info-grid">
                     <div class="info-card">
-                        <h3>Formal Definition — 6-Tuple</h3>
+                        <h3>Formal Definition — 7-Tuple</h3>
                         <div class="def-block">
-                            <span class="def-label">P = (Q, Σ, Γ, δ, q₀, F)</span>
+                            <span class="def-label">P = (Q, Σ, Γ, δ, q₀, Z₀, F)</span>
                             Q  — finite set of states<br>
                             Σ  — input alphabet<br>
                             Γ  — stack alphabet<br>
                             δ  — transition function:<br>
-                               Q × Σε × Γε → P(Q × Γε)<br>
+                            Q × Σε × Γε → P(Q × Γε)<br>
                             q₀ — start state<br>
+                            Z₀ — initial stack symbol (Z₀ ∈ Γ)<br>
                             F  — accept states
                         </div>
                     </div>
                     <div class="info-card">
                         <h3>Acceptance Modes</h3>
                         <ul>
-                            <li><em class="hl">Accept by final state</em>: reach an accept state after reading entire input</li>
-                            <li><em class="hl">Accept by empty stack</em>: stack is empty after reading entire input</li>
+                            <li><em class="hl">Accept by final state</em>: reach an accept state after reading entire
+                                input</li>
+                            <li><em class="hl">Accept by empty stack</em>: stack is empty after reading entire input
+                            </li>
                         </ul>
-                        <p style="margin-top:10px;">Both modes are equivalent — any language accepted by one mode is accepted by the other.</p>
+                        <p style="margin-top:10px;">Both modes are equivalent — any language accepted by one mode is
+                            accepted by the other.</p>
                     </div>
                 </div>
 
@@ -634,7 +703,8 @@ q1, ε, Z₀ → qf, Z₀   ✓ Accepted</code>
                         <p>Every CFL has a PDA. Every PDA has a CFG. The conversion algorithms are:</p>
                         <ul>
                             <li><em class="hl">CFG → PDA</em>: Use a simulating PDA that mimics leftmost derivation</li>
-                            <li><em class="hl">PDA → CFG</em>: Construct variables [p,A,q] for each stack symbol A popped from state p to q</li>
+                            <li><em class="hl">PDA → CFG</em>: Construct variables [p,A,q] for each stack symbol A
+                                popped from state p to q</li>
                         </ul>
                     </div>
                 </div>
@@ -647,7 +717,9 @@ q1, ε, Z₀ → qf, Z₀   ✓ Accepted</code>
 
                 <div class="info-card">
                     <h3>What is a Turing Machine? <span class="tag">Unit 5</span></h3>
-                    <p>A <em class="hl">Turing Machine (TM)</em> is the most powerful computational model. It has an infinite read/write tape and a finite control. A TM can simulate any algorithm — it defines the class of <em class="hl">recursively enumerable (RE) languages</em>.</p>
+                    <p>A <em class="hl">Turing Machine (TM)</em> is the most powerful computational model. It has an
+                        infinite read/write tape and a finite control. A TM can simulate any algorithm — it defines the
+                        class of <em class="hl">recursively enumerable (RE) languages</em>.</p>
                 </div>
 
                 <div class="info-grid">
@@ -655,13 +727,13 @@ q1, ε, Z₀ → qf, Z₀   ✓ Accepted</code>
                         <h3>Formal Definition — 7-Tuple</h3>
                         <div class="def-block">
                             <span class="def-label">M = (Q, Σ, Γ, δ, q₀, q_acc, q_rej)</span>
-                            Q     — finite set of states<br>
-                            Σ     — input alphabet  (⊔ ∉ Σ)<br>
-                            Γ     — tape alphabet  (Σ ∪ {⊔} ⊆ Γ)<br>
-                            δ     — Q × Γ → Q × Γ × {L,R}<br>
-                            q₀    — start state<br>
+                            Q — finite set of states<br>
+                            Σ — input alphabet (⊔ ∉ Σ)<br>
+                            Γ — tape alphabet (Σ ∪ {⊔} ⊆ Γ)<br>
+                            δ — Q × Γ → Q × Γ × {L,R}<br>
+                            q₀ — start state<br>
                             q_acc — accept state<br>
-                            q_rej — reject state  (q_acc ≠ q_rej)
+                            q_rej — reject state (q_acc ≠ q_rej)
                         </div>
                     </div>
                     <div class="info-card">
@@ -700,13 +772,16 @@ Step 5: q0 reads ⊔ → q_acc ✓ Output: "1001"</code>
                         <h3>Language Classes</h3>
                         <ul>
                             <li><em class="hl">Recursive (Decidable)</em>: TM always halts (accept or reject)</li>
-                            <li><em class="hl">RE (Recognizable)</em>: TM may loop; accepts all strings in L but may not reject strings ∉ L</li>
+                            <li><em class="hl">RE (Recognizable)</em>: TM may loop; accepts all strings in L but may not
+                                reject strings ∉ L</li>
                             <li>Decidable ⊂ RE ⊂ All Languages</li>
                         </ul>
                     </div>
                     <div class="info-card">
                         <h3>Church–Turing Thesis</h3>
-                        <p>Any algorithm that can be described informally can be implemented by a Turing Machine. This is a <em class="hl">philosophical claim</em>, not a theorem — it cannot be formally proved but is universally accepted.</p>
+                        <p>Any algorithm that can be described informally can be implemented by a Turing Machine. This
+                            is a <em class="hl">philosophical claim</em>, not a theorem — it cannot be formally proved
+                            but is universally accepted.</p>
                     </div>
                 </div>
 
@@ -719,7 +794,8 @@ Step 5: q0 reads ⊔ → q_acc ✓ Output: "1001"</code>
                         <span class="chip">2-stack PDA</span>
                         <span class="chip">RAM model</span>
                     </div>
-                    <p style="margin-top:12px;">All these variants can be simulated by a standard single-tape deterministic TM. They differ in efficiency, not in power.</p>
+                    <p style="margin-top:12px;">All these variants can be simulated by a standard single-tape
+                        deterministic TM. They differ in efficiency, not in power.</p>
                 </div>
             </div>
 
@@ -730,7 +806,9 @@ Step 5: q0 reads ⊔ → q_acc ✓ Output: "1001"</code>
 
                 <div class="info-card">
                     <h3>What is Decidability? <span class="tag">Unit 6</span></h3>
-                    <p>A language L is <em class="hl">decidable</em> (recursive) if there exists a Turing Machine that <strong>always halts</strong> and correctly accepts strings in L and rejects strings not in L. Decidability asks: <em class="hl">"Can this problem be solved by any algorithm?"</em></p>
+                    <p>A language L is <em class="hl">decidable</em> (recursive) if there exists a Turing Machine that
+                        <strong>always halts</strong> and correctly accepts strings in L and rejects strings not in L.
+                        Decidability asks: <em class="hl">"Can this problem be solved by any algorithm?"</em></p>
                 </div>
 
                 <div class="info-grid">
@@ -756,19 +834,20 @@ Step 5: q0 reads ⊔ → q_acc ✓ Output: "1001"</code>
 
                 <div class="info-card">
                     <h3>The Halting Problem — Proof by Contradiction</h3>
-                    <p>Assume a TM <em class="hl">H</em> decides HALT<sub>TM</sub>. Construct TM <em class="hl">D</em>:</p>
+                    <p>Assume a TM <em class="hl">H</em> decides HALT<sub>TM</sub>. Construct TM <em class="hl">D</em>:
+                    </p>
                     <div class="def-block">
                         D on input ⟨M⟩:
-          Run H on ⟨M, ⟨M⟩⟩
-          If H accepts  → D rejects (loop)
-          If H rejects  → D accepts
+                        Run H on ⟨M, ⟨M⟩⟩
+                        If H accepts → D rejects (loop)
+                        If H rejects → D accepts
                     </div>
                     <p>Now run D on ⟨D⟩:</p>
                     <div class="def-block">
-                        If D accepts ⟨D⟩  → H says D halts on ⟨D⟩
-                                         → D should loop  — contradiction!
-                        If D rejects ⟨D⟩  → H says D loops on ⟨D⟩
-                                         → D should accept — contradiction!
+                        If D accepts ⟨D⟩ → H says D halts on ⟨D⟩
+                        → D should loop — contradiction!
+                        If D rejects ⟨D⟩ → H says D loops on ⟨D⟩
+                        → D should accept — contradiction!
                     </div>
                     <p>Therefore <em class="hl">no such H can exist</em>. The Halting Problem is undecidable. ∎</p>
                 </div>
@@ -776,21 +855,24 @@ Step 5: q0 reads ⊔ → q_acc ✓ Output: "1001"</code>
                 <div class="info-grid">
                     <div class="info-card">
                         <h3>Reductions</h3>
-                        <p>A language A <em class="hl">reduces</em> to B (A ≤ₘ B) if there is a computable function f such that:</p>
+                        <p>A language A <em class="hl">reduces</em> to B (A ≤ₘ B) if there is a computable function f
+                            such that:</p>
                         <div class="def-block">
-                            w ∈ A  ⟺  f(w) ∈ B
+                            w ∈ A ⟺ f(w) ∈ B
                         </div>
                         <p>If A ≤ₘ B and B is decidable → A is decidable.<br>
-                        If A ≤ₘ B and A is undecidable → B is undecidable.</p>
+                            If A ≤ₘ B and A is undecidable → B is undecidable.</p>
                     </div>
                     <div class="info-card">
                         <h3>Rice's Theorem</h3>
-                        <p>Every <em class="hl">non-trivial semantic property</em> of Turing machines is undecidable.</p>
+                        <p>Every <em class="hl">non-trivial semantic property</em> of Turing machines is undecidable.
+                        </p>
                         <ul>
                             <li><strong>Semantic</strong>: about L(M), not the description of M</li>
                             <li><strong>Non-trivial</strong>: true for some TMs, false for others</li>
                         </ul>
-                        <p style="margin-top:8px;">Examples: "Does M accept ε?", "Is L(M) finite?", "Is L(M) = Σ*?" — all undecidable by Rice's.</p>
+                        <p style="margin-top:8px;">Examples: "Does M accept ε?", "Is L(M) finite?", "Is L(M) = Σ*?" —
+                            all undecidable by Rice's.</p>
                     </div>
                 </div>
 
@@ -854,4 +936,5 @@ Step 5: q0 reads ⊔ → q_acc ✓ Output: "1001"</code>
         ], 8000);
     </script>
 </body>
+
 </html>
