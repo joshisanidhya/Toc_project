@@ -36,6 +36,32 @@
             transition: opacity 0.2s;
         }
         .recap-link:hover { opacity: 1; text-decoration: underline; }
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .action-row .btn-run {
+            flex: 1;
+            margin-top: 0;
+        }
+        .ex-btn {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.85);
+            padding: 10px 14px;
+            border-radius: 9999px;
+            font-family: var(--font);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .ex-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
     </style>
 </head>
 <body class="app-mode">
@@ -83,7 +109,7 @@
                     <h1 class="page-title">PDA Simulator</h1>
                 </div>
                 <div class="page-header-right">
-                    <p class="page-desc">A Pushdown Automaton extends a DFA with a stack (Γ). This simulation checks balanced parentheses — the quintessential PDA problem — using a 6-tuple formal definition.</p>
+                    <p class="page-desc">A Pushdown Automaton extends a DFA with a stack (Γ). This simulation checks balanced parentheses — the quintessential PDA problem — using a 7-tuple formal definition.</p>
                     <a href='../module6_decidability/recap.html#pda' class="recap-link">📖 PDA Theory &amp; Recap →</a>
                 </div>
             </div>
@@ -99,43 +125,50 @@
 
                 <!-- LEFT: PDA Definition -->
                 <div class="sim-card">
-                    <h2 class="card-title">PDA Definition <span class="tuple-badge">P = (Q, Σ, Γ, δ, q₀, F)</span></h2>
+                    <h2 class="card-title">PDA Definition <span class="tuple-badge">P = (Q, Σ, Γ, δ, q₀, Z₀, F)</span></h2>
 
                     <!-- Q -->
                     <div class="form-group">
-                        <label class="form-label">Q &mdash; States <span class="hint">(fixed for this PDA)</span></label>
-                        <input class="mono-input" value="q0, q1, qf" readonly style="opacity:0.5;cursor:not-allowed;">
+                        <label class="form-label">Q &mdash; States <span class="hint">(editable)</span></label>
+                        <input id="pdaStates" class="mono-input" value="q0, q1, qf" placeholder="e.g. q0, q1, qf">
                     </div>
 
                     <!-- Σ and Γ in one row -->
                     <div class="input-row">
                         <div class="form-group">
                             <label class="form-label">Σ &mdash; Input Alphabet</label>
-                            <input class="mono-input" value="( , )" readonly style="opacity:0.5;cursor:not-allowed;">
+                            <input id="pdaInputAlphabet" class="mono-input" value="( , )" placeholder="e.g. ( , )">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Γ &mdash; Stack Alphabet</label>
-                            <input class="mono-input" value="A, Z₀" readonly style="opacity:0.5;cursor:not-allowed;">
+                            <input id="pdaStackAlphabet" class="mono-input" value="A, Z0" placeholder="e.g. A, Z0">
                         </div>
                     </div>
 
                     <!-- δ -->
                     <div class="form-group">
                         <label class="form-label">δ &mdash; Transition Function</label>
-                        <textarea class="mono-input" rows="3" readonly style="opacity:0.5;cursor:not-allowed;font-size:0.78rem;">q0, (, Z₀ → q0, AZ₀  (push on empty)
-q0, (, A  → q0, AA   (push)
-q0, ), A  → q1, ε    (pop)</textarea>
+                        <textarea id="pdaTransitions" class="mono-input" rows="3" style="font-size:0.78rem;">q0, (, Z0 -> q0, AZ0  (push on empty)
+q0, (, A  -> q0, AA   (push)
+q0, ), A  -> q1, e    (pop)</textarea>
                     </div>
 
-                    <!-- q0 and F -->
+                    <!-- q0, Z0 and F -->
                     <div class="input-row">
                         <div class="form-group">
                             <label class="form-label">q₀ &mdash; Start State</label>
-                            <input class="mono-input" value="q0" readonly style="opacity:0.5;cursor:not-allowed;">
+                            <input id="pdaStartState" class="mono-input" value="q0" placeholder="e.g. q0">
                         </div>
                         <div class="form-group">
+                            <label class="form-label">Z₀ &mdash; Initial Stack Symbol</label>
+                            <input id="pdaInitialStackSymbol" class="mono-input" value="Z0" placeholder="e.g. Z0">
+                        </div>
+                    </div>
+
+                    <div class="input-row">
+                        <div class="form-group">
                             <label class="form-label">F &mdash; Accept States</label>
-                            <input class="mono-input" value="qf" readonly style="opacity:0.5;cursor:not-allowed;">
+                            <input id="pdaAcceptStates" class="mono-input" value="qf" placeholder="e.g. qf">
                         </div>
                     </div>
 
@@ -145,12 +178,15 @@ q0, ), A  → q1, ε    (pop)</textarea>
                         <input id="pdaInput" class="mono-input" placeholder="e.g. (()) or ((()))">
                     </div>
 
-                    <button class="btn-run" id="runBtn" onclick="runPDA()">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                        </svg>
-                        Check Balance
-                    </button>
+                    <div class="action-row">
+                        <button class="btn-run" id="runBtn" onclick="runPDA()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            Check Balance
+                        </button>
+                        <button class="ex-btn" type="button" onclick="loadPDAExample()">Load Example</button>
+                    </div>
                 </div>
 
                 <!-- RIGHT: Result -->

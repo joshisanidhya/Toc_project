@@ -36,6 +36,32 @@
             transition: opacity 0.2s;
         }
         .recap-link:hover { opacity: 1; text-decoration: underline; }
+        .action-row {
+            display: flex;
+            gap: 8px;
+            margin-top: 10px;
+            flex-wrap: wrap;
+        }
+        .action-row .btn-run {
+            flex: 1;
+            margin-top: 0;
+        }
+        .ex-btn {
+            background: rgba(255,255,255,0.06);
+            border: 1px solid rgba(255,255,255,0.12);
+            color: rgba(255,255,255,0.85);
+            padding: 10px 14px;
+            border-radius: 9999px;
+            font-family: var(--font);
+            font-size: 0.82rem;
+            font-weight: 600;
+            cursor: pointer;
+            transition: all 0.2s ease;
+        }
+        .ex-btn:hover {
+            border-color: var(--accent);
+            color: var(--accent);
+        }
     </style>
 </head>
 <body class="app-mode">
@@ -103,39 +129,39 @@
 
                     <!-- Q -->
                     <div class="form-group">
-                        <label class="form-label">Q &mdash; States</label>
-                        <input class="mono-input" value="q0, q_acc, q_rej" readonly style="opacity:0.5;cursor:not-allowed;">
+                        <label class="form-label">Q &mdash; States <span class="hint">(editable)</span></label>
+                        <input id="tmStates" class="mono-input" value="q0, q_acc, q_rej" placeholder="e.g. q0, q_acc, q_rej">
                     </div>
 
                     <!-- Σ and Γ -->
                     <div class="input-row">
                         <div class="form-group">
                             <label class="form-label">Σ &mdash; Input Alphabet</label>
-                            <input class="mono-input" value="0, 1" readonly style="opacity:0.5;cursor:not-allowed;">
+                            <input id="tmInputAlphabet" class="mono-input" value="0, 1" placeholder="e.g. 0, 1">
                         </div>
                         <div class="form-group">
                             <label class="form-label">Γ &mdash; Tape Alphabet</label>
-                            <input class="mono-input" value="0, 1, ⊔" readonly style="opacity:0.5;cursor:not-allowed;">
+                            <input id="tmTapeAlphabet" class="mono-input" value="0, 1, B" placeholder="e.g. 0, 1, B">
                         </div>
                     </div>
 
                     <!-- δ -->
                     <div class="form-group">
                         <label class="form-label">δ &mdash; Transition Function</label>
-                        <textarea class="mono-input" rows="3" readonly style="opacity:0.5;cursor:not-allowed;font-size:0.78rem;">δ(q0, 0) = (q0, 1, R)   — flip 0→1, move Right
-δ(q0, 1) = (q0, 0, R)   — flip 1→0, move Right
-δ(q0, ⊔) = (q_acc, ⊔, R) — blank: Accept</textarea>
+                        <textarea id="tmTransitions" class="mono-input" rows="3" style="font-size:0.78rem;">d(q0, 0) = (q0, 1, R)   - flip 0->1, move Right
+d(q0, 1) = (q0, 0, R)   - flip 1->0, move Right
+d(q0, B) = (q_acc, B, R) - blank: Accept</textarea>
                     </div>
 
                     <!-- q0, q_acc, q_rej -->
                     <div class="input-row">
                         <div class="form-group">
                             <label class="form-label">q₀ &mdash; Start State</label>
-                            <input class="mono-input" value="q0" readonly style="opacity:0.5;cursor:not-allowed;">
+                            <input id="tmStartState" class="mono-input" value="q0" placeholder="e.g. q0">
                         </div>
                         <div class="form-group">
                             <label class="form-label">q_acc &mdash; Accept State</label>
-                            <input class="mono-input" value="q_acc" readonly style="opacity:0.5;cursor:not-allowed;">
+                            <input id="tmAcceptState" class="mono-input" value="q_acc" placeholder="e.g. q_acc">
                         </div>
                     </div>
 
@@ -145,12 +171,15 @@
                         <input id="tmInput" class="mono-input" placeholder="e.g. 0110 or 10101">
                     </div>
 
-                    <button class="btn-run" id="runBtn" onclick="runTM()">
-                        <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
-                            <polygon points="5 3 19 12 5 21 5 3"></polygon>
-                        </svg>
-                        Run Machine
-                    </button>
+                    <div class="action-row">
+                        <button class="btn-run" id="runBtn" onclick="runTM()">
+                            <svg width="15" height="15" viewBox="0 0 24 24" fill="currentColor">
+                                <polygon points="5 3 19 12 5 21 5 3"></polygon>
+                            </svg>
+                            Run Machine
+                        </button>
+                        <button class="ex-btn" type="button" onclick="loadTMExample()">Load Example</button>
+                    </div>
                 </div>
 
                 <!-- RIGHT: Result -->
