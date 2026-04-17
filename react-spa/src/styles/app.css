@@ -1,0 +1,292 @@
+:root {
+  --app-max-width: 1120px;
+}
+
+#root,
+.app-root {
+  min-height: 100vh;
+}
+
+.app-main {
+  position: relative;
+  z-index: 1;
+  padding-top: 86px;
+}
+
+.container-shell {
+  width: min(var(--app-max-width), 92vw);
+  margin: 0 auto;
+}
+
+.footer {
+  position: relative;
+  z-index: 2;
+}
+
+.footer-brand-inline {
+  display: flex;
+  align-items: center;
+  gap: 10px;
+}
+
+.footer-logo {
+  height: 24px;
+  width: auto;
+  object-fit: contain;
+  opacity: 0.8;
+}
+
+.nav-action-link {
+  border: 0;
+  background: transparent;
+  cursor: pointer;
+}
+
+.module-page {
+  padding-top: 20px;
+  padding-bottom: 36px;
+}
+
+.module-header {
+  background: rgba(255, 255, 255, 0.88);
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 18px;
+  padding: 24px;
+  margin-bottom: 18px;
+}
+
+.module-header h1 {
+  margin-bottom: 8px;
+}
+
+.module-kicker {
+  letter-spacing: 0.08em;
+  text-transform: uppercase;
+  font-size: 0.78rem;
+  font-weight: 700;
+  color: #5b5b5b;
+  margin-bottom: 8px;
+}
+
+.quick-links {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+  margin-bottom: 18px;
+}
+
+.quick-link-pill {
+  background: #111;
+  color: #fff;
+  border-radius: 999px;
+  padding: 8px 14px;
+  font-size: 0.9rem;
+  font-weight: 600;
+  border: 1px solid transparent;
+  transition: all 0.2s ease;
+}
+
+.quick-link-pill:hover {
+  transform: translateY(-1px);
+  border-color: rgba(255, 255, 255, 0.15);
+}
+
+.module-body {
+  min-height: 180px;
+}
+
+.placeholder-panel {
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 16px;
+  padding: 20px;
+}
+
+.sim-grid {
+  display: grid;
+  grid-template-columns: repeat(2, minmax(280px, 1fr));
+  gap: 16px;
+}
+
+.sim-card-react {
+  display: flex;
+  flex-direction: column;
+  gap: 8px;
+  border-radius: 16px;
+  background: #fff;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  padding: 18px;
+}
+
+.sim-card-react textarea,
+.sim-card-react input {
+  width: 100%;
+  border-radius: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.16);
+  padding: 10px;
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  resize: vertical;
+}
+
+.sim-card-react label {
+  font-weight: 600;
+  margin-top: 6px;
+}
+
+.react-btn {
+  margin-top: 10px;
+  justify-content: center;
+  border: 0;
+  cursor: pointer;
+}
+
+.utility-page {
+  padding-top: 30px;
+  padding-bottom: 50px;
+}
+
+@media (max-width: 900px) {
+  .sim-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .app-main {
+    padding-top: 78px;
+  }
+}
+
+.form-field-react {
+  display: flex;
+  flex-direction: column;
+  gap: 6px;
+}
+
+.field-hint {
+  color: #666;
+  font-weight: 500;
+  font-size: 0.82rem;
+}
+
+.inline-actions {
+  display: flex;
+  gap: 10px;
+  align-items: center;
+  margin-top: 12px;
+  flex-wrap: wrap;
+}
+
+.secondary-chip-btn {
+  border: 1px solid rgba(0, 0, 0, 0.18);
+  background: #fff;
+  color: #111;
+  border-radius: 999px;
+  padding: 10px 14px;
+  font-weight: 600;
+  cursor: pointer;
+}
+
+.secondary-chip-btn:hover {
+  background: #f5f5f5;
+}
+
+.dfa-summary-grid {
+  display: grid;
+  grid-template-columns: 1fr;
+  gap: 10px;
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  background: #fcfcfc;
+}
+
+.mini-label {
+  text-transform: uppercase;
+  letter-spacing: 0.05em;
+  font-size: 0.72rem;
+  color: #666;
+  font-weight: 700;
+}
+
+.mono-value {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.84rem;
+  color: #111;
+}
+
+.table-block {
+  margin-top: 12px;
+}
+
+.table-title {
+  font-weight: 700;
+  margin-bottom: 8px;
+}
+
+.table-scroll-react {
+  overflow-x: auto;
+}
+
+.transition-table-react {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: 0.9rem;
+}
+
+.transition-table-react th,
+.transition-table-react td {
+  border: 1px solid rgba(0, 0, 0, 0.1);
+  padding: 8px 10px;
+  text-align: left;
+}
+
+.transition-table-react th {
+  background: #f7f7f7;
+  font-size: 0.78rem;
+  text-transform: uppercase;
+  letter-spacing: 0.03em;
+}
+
+.state-chip,
+.accept-chip {
+  font-family: 'JetBrains Mono', 'Courier New', monospace;
+  font-size: 0.82rem;
+}
+
+.accept-chip {
+  color: #1a9c4b;
+  font-weight: 700;
+}
+
+.step-selector-row {
+  display: flex;
+  gap: 8px;
+  flex-wrap: wrap;
+  margin-bottom: 8px;
+}
+
+.step-pill {
+  border: 1px solid rgba(0, 0, 0, 0.15);
+  border-radius: 999px;
+  background: #fff;
+  font-size: 0.78rem;
+  padding: 6px 10px;
+  cursor: pointer;
+}
+
+.step-pill.active {
+  border-color: #111;
+  background: #111;
+  color: #fff;
+}
+
+.step-detail-card {
+  border: 1px solid rgba(0, 0, 0, 0.08);
+  border-radius: 12px;
+  padding: 12px;
+  background: #fcfcfc;
+}
+
+.new-state-highlight {
+  color: #1a9c4b;
+  font-weight: 700;
+}
