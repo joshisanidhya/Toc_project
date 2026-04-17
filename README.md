@@ -20,9 +20,7 @@
 
 ## 📖 About
 
-**Automata Studio** is a hands-on, browser-based simulator for all six units of the Theory of Computation course at **IIIT Sri City**. Instead of just reading textbook definitions, you can actually *run* your automata, *test* your grammars, and *see* computation happen in real time.
-
-Originally built with vanilla HTML/CSS/JS, the platform has been **modernized as a React + Vite SPA** for improved performance, maintainability, and scalability. The interface features a dark-mode aesthetic with dynamic animations, responsive design, and interactive simulators — all powered by React hooks and modular component architecture.
+An interactive browser-based Theory of Computation simulator built using **React 18**, **Vite**, and **React Router v6**, covering DFA/NFA, Regular Expressions, CFG/Parse Trees/CNF, PDA, Turing Machines, and Decidability-Complexity topics. It provides step-by-step simulation, conversion workflows, and visual traces to help students understand formal models and computation behavior.
 
 > Designed and developed by **[Sanidhya Joshi](https://www.linkedin.com/in/joshisanidhya/)** · IIIT Sri City, 2026
 
