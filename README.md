@@ -9,9 +9,10 @@
 
 [![Live Demo](https://img.shields.io/badge/Live%20Demo-automata--studio--toc.vercel.app-D2FF00?style=for-the-badge&logo=vercel&logoColor=black)](https://automata-studio-toc.vercel.app)
 [![License](https://img.shields.io/badge/License-MIT-white?style=for-the-badge)](LICENSE)
-[![HTML5](https://img.shields.io/badge/HTML5-E34F26?style=for-the-badge&logo=html5&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/HTML)
+[![React](https://img.shields.io/badge/React-18-61DAFB?style=for-the-badge&logo=react&logoColor=black)](https://react.dev)
+[![Vite](https://img.shields.io/badge/Vite-5.4.21-646CFF?style=for-the-badge&logo=vite&logoColor=white)](https://vitejs.dev)
+[![React Router](https://img.shields.io/badge/React%20Router-v6-F44250?style=for-the-badge&logo=react-router&logoColor=white)](https://reactrouter.com)
 [![CSS3](https://img.shields.io/badge/CSS3-1572B6?style=for-the-badge&logo=css3&logoColor=white)](https://developer.mozilla.org/en-US/docs/Web/CSS)
-[![JavaScript](https://img.shields.io/badge/JavaScript-F7DF1E?style=for-the-badge&logo=javascript&logoColor=black)](https://developer.mozilla.org/en-US/docs/Web/JavaScript)
 
 </div>
 
@@ -21,7 +22,7 @@
 
 **Automata Studio** is a hands-on, browser-based simulator for all six units of the Theory of Computation course at **IIIT Sri City**. Instead of just reading textbook definitions, you can actually *run* your automata, *test* your grammars, and *see* computation happen in real time.
 
-The interface is built with a dark-mode, glassmorphic aesthetic featuring dynamic background animations, a collapsible sidebar, and per-module tab navigation — all without any frontend framework.
+Originally built with vanilla HTML/CSS/JS, the platform has been **modernized as a React + Vite SPA** for improved performance, maintainability, and scalability. The interface features a dark-mode aesthetic with dynamic animations, responsive design, and interactive simulators — all powered by React hooks and modular component architecture.
 
 > Designed and developed by **[Sanidhya Joshi](https://www.linkedin.com/in/joshisanidhya/)** · IIIT Sri City, 2026
 
@@ -93,38 +94,50 @@ The simulator covers all **6 units** of the TOC course:
 
 | Layer | Technology |
 |-------|-----------|
-| Structure | HTML5 (semantic) |
-| Styling | Vanilla CSS3 (glassmorphism, CSS variables, animations) |
-| Logic | Vanilla JavaScript (ES6+, Canvas API) |
+| Frontend Framework | React 18 (Hooks: useState, useMemo, useEffect) |
+| Build Tool | Vite 5.4.21 (Lightning-fast HMR) |
+| Routing | React Router v6 (Client-side SPA navigation) |
+| Styling | CSS3 (Glassmorphism, Variables, Animations) + Legacy CSS migration |
+| State Management | React Hooks (No external state library) |
 | Fonts | Inter, JetBrains Mono, Space Grotesk (Google Fonts) |
-| Hosting | [Vercel](https://vercel.com) (auto-deploy from GitHub) |
+| Hosting | [Vercel](https://vercel.com) (Auto-deploy from GitHub) |
 
-**No frameworks. No build tools. No dependencies.**
+**Modern React SPA with clean modular architecture and zero external dependencies for state management.**
 
 ---
 
 ## 💻 Running Locally
 
-Since this is a pure HTML/CSS/JS project, you just need any static file server:
+The React + Vite SPA is located in the `/react-spa` directory. Follow these steps to run locally:
 
-### Option 1 — VS Code Live Server
-1. Install the **Live Server** extension in VS Code
-2. Open the project folder
-3. Right-click `index.html` → **Open with Live Server**
+### Prerequisites
+- Node.js 16+ 
+- npm or yarn
 
-### Option 2 — Python
+### Setup & Development
 ```bash
-cd Toc_project
-python3 -m http.server 8080
-# Open http://localhost:8080
+# 1. Navigate to the React SPA directory
+cd react-spa
+
+# 2. Install dependencies
+npm install
+
+# 3. Start the development server
+npm run dev
+# Open http://localhost:5173
 ```
 
-### Option 3 — Node (npx)
+### Build for Production
 ```bash
-cd Toc_project
-npx serve .
-# Open http://localhost:3000
+npm run build
+# Generates optimized dist/ folder
 ```
+
+### Preview Production Build
+```bash
+npm run preview
+```
+
 ---
 
 ## 📬 Contact
